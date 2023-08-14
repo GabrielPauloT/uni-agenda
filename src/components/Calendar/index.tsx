@@ -6,7 +6,7 @@ import { Appointment, CustomCalendarEvent } from '@/config/types/type';
 import withDragAndDrop, { withDragAndDropProps } from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import './index.css';
-import AppointmentEvent from '../AppointmentEvent.tsx';
+import AppointmentEvent from '../AppointmentEvent';
 
 moment.locale('pt-br');
 
@@ -47,8 +47,7 @@ export default function CustomCalendar({event, resizable, onEventResize, onEvent
   const Year = new Date().getFullYear();
 
   return (
-    <div className="bg-gray-100 p-4">
-      <div className="rounded-lg bg-white p-4 shadow">
+      <div className="rounded-lg bg-white p-4 shadow-md">
         <DnDCalendar
           components={components}
           localizer={localizer}
@@ -85,6 +84,5 @@ export default function CustomCalendar({event, resizable, onEventResize, onEvent
           }
         />
       </div>
-    </div>
   );
 };
