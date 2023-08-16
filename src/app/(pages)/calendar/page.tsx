@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { EVENTS } from "@/components/Calendar/events";
 import moment from "moment";
 import { CustomCalendarEvent } from "@/config/types/type";
+import { SlotInfo } from "react-big-calendar";
 
 export default function Calendar() {
   const [events, setEvents] = useState<CustomCalendarEvent[]>(EVENTS);
@@ -26,7 +27,35 @@ export default function Calendar() {
     },
     []
   );
-  // console.log("events", events);
+
+  const handleSelectSlot = useCallback(
+    ({ start, end, resourceId }: SlotInfo ) => {
+      const professor = window.prompt('Nome do Professor')
+      const id = Math.floor(Math.random() * 1000)
+      if (professor) {
+        setEvents((prev) => [
+          ...prev, {
+            start,
+            end,
+            isDraggable: true,
+            data: {
+              appointment: {
+                id,
+                professor,
+              },
+              },
+               resourceId
+            }
+        ])
+      }
+    },
+    [setEvents]
+  )
+
+  const handleSelectEvent = useCallback(
+    ({ data }: CustomCalendarEvent ) => window.alert(data?.appointment.professor),
+    []
+  )
 
   return (
     <CustomCalendar
@@ -38,6 +67,8 @@ export default function Calendar() {
         onChangeEventTime(start as Date, end as Date, event?.data?.appointment?.id, resourceId);
       }}
       event={events}
+      onSelectSlot={handleSelectSlot}
+      onSelectEvent={handleSelectEvent}
     />
   )
 }

@@ -1,12 +1,13 @@
+"use client"
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import 'moment/locale/pt-br'
-import { Appointment, CustomCalendarEvent } from '@/config/types/type';
-import withDragAndDrop, { withDragAndDropProps } from 'react-big-calendar/lib/addons/dragAndDrop';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import './index.css';
 import AppointmentEvent from '../AppointmentEvent';
+import { CustomCalendarProps } from './types';
 
 moment.locale('pt-br');
 
@@ -29,11 +30,9 @@ const messages = {
 
 const localizer = momentLocalizer(moment);
 
-  const DnDCalendar = withDragAndDrop(Calendar)
-  type DnDType = CustomCalendarEvent & withDragAndDropProps & { event: CustomCalendarEvent[] }
-  type CustomCalendarProps = Omit<DnDType, 'localizer'>;
+const DnDCalendar = withDragAndDrop(Calendar)
 
-export default function CustomCalendar({event, resizable, onEventResize, onEventDrop}: CustomCalendarProps) {
+export default function CustomCalendar({event, resizable, onEventResize, onEventDrop, onSelectSlot, onSelectEvent}: CustomCalendarProps) {
 
   const components = {
     event: ({ event }: any) => {
@@ -49,6 +48,7 @@ export default function CustomCalendar({event, resizable, onEventResize, onEvent
   return (
       <div className="rounded-lg bg-white p-4 shadow-md">
         <DnDCalendar
+          selectable
           components={components}
           localizer={localizer}
           defaultDate={new Date()}
@@ -76,12 +76,8 @@ export default function CustomCalendar({event, resizable, onEventResize, onEvent
           onEventResize={onEventResize}
           onEventDrop={onEventDrop}
           events={event}
-          onSelectSlot={(slotInfo) =>
-            console.log('onSelectSlot', slotInfo)
-          }
-          onSelectEvent={(event) =>
-            console.log('onSelectEvent', event)
-          }
+          onSelectSlot={onSelectSlot}
+          onSelectEvent={onSelectEvent}
         />
       </div>
   );
