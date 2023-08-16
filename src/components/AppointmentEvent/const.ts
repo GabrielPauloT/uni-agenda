@@ -1,9 +1,9 @@
 export enum AppointmentStatusCode {
-    Pending = "P",
-    CheckedIn = "CI",
+  Pending = "P",
+  CheckedIn = "CI",
 }
 
 export const EVENT_STATUS_COLORS = {
-    P: "#bee2fa",
-    CI: "#c7edca",
+  P: "#bee2fa",
+  CI: "#c7edca",
 };

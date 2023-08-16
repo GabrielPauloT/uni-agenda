@@ -4,7 +4,5 @@ import { IconProps } from "./types";
 export function Icons({ name, size, ...props }: IconProps) {
   const CurrentIcon = IconsAllowed[name];
 
-  return (
-      <CurrentIcon size={size || 24} {...props} />
-  );
+  return <CurrentIcon size={size || 24} {...props} />;
 }

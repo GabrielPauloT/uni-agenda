@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import CustomCalendar from "@/components/Calendar";
 import { useCallback, useState } from "react";
 import { EVENTS } from "@/components/Calendar/events";
@@ -9,7 +9,12 @@ import { SlotInfo } from "react-big-calendar";
 export default function Calendar() {
   const [events, setEvents] = useState<CustomCalendarEvent[]>(EVENTS);
   const onChangeEventTime = useCallback(
-    (start: Date, end: Date, appointmentId: number | undefined, resourceId: number) => {
+    (
+      start: Date,
+      end: Date,
+      appointmentId: number | undefined,
+      resourceId: number,
+    ) => {
       setEvents(() => {
         return [
           ...EVENTS.map((event) =>
@@ -20,21 +25,22 @@ export default function Calendar() {
                   end: moment(end)?.toDate(),
                   resourceId: resourceId,
                 }
-              : event
+              : event,
           ),
         ];
       });
     },
-    []
+    [],
   );
 
   const handleSelectSlot = useCallback(
-    ({ start, end, resourceId }: SlotInfo ) => {
-      const professor = window.prompt('Nome do Professor')
-      const id = Math.floor(Math.random() * 1000)
+    ({ start, end, resourceId }: SlotInfo) => {
+      const professor = window.prompt("Nome do Professor");
+      const id = Math.floor(Math.random() * 1000);
       if (professor) {
         setEvents((prev) => [
-          ...prev, {
+          ...prev,
+          {
             start,
             end,
             isDraggable: true,
@@ -43,32 +49,43 @@ export default function Calendar() {
                 id,
                 professor,
               },
-              },
-               resourceId
-            }
-        ])
+            },
+            resourceId,
+          },
+        ]);
       }
     },
-    [setEvents]
-  )
+    [setEvents],
+  );
 
   const handleSelectEvent = useCallback(
-    ({ data }: CustomCalendarEvent ) => window.alert(data?.appointment.professor),
-    []
-  )
+    ({ data }: CustomCalendarEvent) =>
+      window.alert(data?.appointment.professor),
+    [],
+  );
 
   return (
     <CustomCalendar
       resizable
       onEventDrop={({ start, end, event, resourceId }) => {
-        onChangeEventTime(start as Date, end as Date, event?.data?.appointment?.id, resourceId);
+        onChangeEventTime(
+          start as Date,
+          end as Date,
+          event?.data?.appointment?.id,
+          resourceId,
+        );
       }}
       onEventResize={({ start, end, event, resourceId }) => {
-        onChangeEventTime(start as Date, end as Date, event?.data?.appointment?.id, resourceId);
+        onChangeEventTime(
+          start as Date,
+          end as Date,
+          event?.data?.appointment?.id,
+          resourceId,
+        );
       }}
       event={events}
       onSelectSlot={handleSelectSlot}
       onSelectEvent={handleSelectEvent}
     />
-  )
+  );
 }
