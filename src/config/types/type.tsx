@@ -4,7 +4,7 @@ export type Appointment = {
   };
   
   export type CustomCalendarEvent = {
-    resourceId?: number;
+    resourceId?: number | string | undefined;
     start?: Date;
     end?: Date;
     data?: { appointment: Appointment };
