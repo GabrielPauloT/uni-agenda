@@ -11,17 +11,6 @@ import { CustomCalendarProps } from "./types";
 
 moment.locale("pt-br");
 
-const resourceMap = [
-  { id: 1, title: "Sala 1" },
-  { id: 2, title: "Sala 2" },
-  { id: 3, title: "Sala 3" },
-  { id: 4, title: "Sala 4" },
-  { id: 5, title: "Sala 5" },
-  { id: 6, title: "Sala 6" },
-  { id: 7, title: "Sala 7" },
-  { id: 8, title: "Sala 8" },
-];
-
 const messages = {
   today: "Hoje",
   previous: "Voltar",
@@ -39,6 +28,9 @@ export default function CustomCalendar({
   onEventDrop,
   onSelectSlot,
   onSelectEvent,
+  resourceMap,
+  views,
+  defaultView,
 }: CustomCalendarProps) {
   const components = {
     event: ({ event }: any) => {
@@ -54,12 +46,13 @@ export default function CustomCalendar({
   return (
     <div className="rounded-lg bg-white p-4 shadow-md">
       <DnDCalendar
+        draggableAccessor={(event: any) => event.isDraggable === true}
         selectable
         components={components}
         localizer={localizer}
         defaultDate={new Date()}
-        defaultView="day"
-        views={["day"]}
+        defaultView={defaultView}
+        views={views}
         step={50}
         timeslots={1}
         resources={resourceMap}

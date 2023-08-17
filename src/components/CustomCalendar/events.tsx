@@ -1,4 +1,4 @@
-import { CustomCalendarEvent } from "@/config/types/type";
+import { CustomCalendarEvent } from "@/types/type";
 
 export const EVENTS: CustomCalendarEvent[] = [
   {
@@ -11,7 +11,7 @@ export const EVENTS: CustomCalendarEvent[] = [
         professor: "Henaldo",
       },
     },
-    isDraggable: true,
+    isDraggable: false,
   },
   {
     resourceId: 2,
