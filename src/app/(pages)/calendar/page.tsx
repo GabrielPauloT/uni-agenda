@@ -1,10 +1,11 @@
 "use client";
-import CustomCalendar from "@/components/Calendar";
+import CustomCalendar from "@/components/CustomCalendar";
 import { useCallback, useState } from "react";
-import { EVENTS } from "@/components/Calendar/events";
+import { EVENTS } from "@/components/CustomCalendar/events";
 import moment from "moment";
-import { CustomCalendarEvent } from "@/config/types/type";
+import { CustomCalendarEvent } from "@/types/type";
 import { SlotInfo } from "react-big-calendar";
+import { resourceMap } from "./const";
 
 export default function Calendar() {
   const [events, setEvents] = useState<CustomCalendarEvent[]>(EVENTS);
@@ -35,7 +36,7 @@ export default function Calendar() {
 
   const handleSelectSlot = useCallback(
     ({ start, end, resourceId }: SlotInfo) => {
-      const professor = window.prompt("Nome do Professor");
+      const professor = window.prompt("Nome do Responsável");
       const id = Math.floor(Math.random() * 1000);
       if (professor) {
         setEvents((prev) => [
@@ -66,6 +67,9 @@ export default function Calendar() {
 
   return (
     <CustomCalendar
+      defaultView="day"
+      views={["day"]}
+      resourceMap={resourceMap}
       resizable
       onEventDrop={({ start, end, event, resourceId }) => {
         onChangeEventTime(
