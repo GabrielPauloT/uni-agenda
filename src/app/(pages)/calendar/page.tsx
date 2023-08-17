@@ -3,7 +3,7 @@ import CustomCalendar from "@/components/Calendar";
 import { useCallback, useState } from "react";
 import { EVENTS } from "@/components/Calendar/events";
 import moment from "moment";
-import { CustomCalendarEvent } from "@/config/types/type";
+import { CustomCalendarEvent } from "@/types/type";
 import { SlotInfo } from "react-big-calendar";
 
 export default function Calendar() {
@@ -35,7 +35,7 @@ export default function Calendar() {
 
   const handleSelectSlot = useCallback(
     ({ start, end, resourceId }: SlotInfo) => {
-      const professor = window.prompt("Nome do Professor");
+      const professor = window.prompt("Nome do Responsável");
       const id = Math.floor(Math.random() * 1000);
       if (professor) {
         setEvents((prev) => [

@@ -54,12 +54,13 @@ export default function CustomCalendar({
   return (
     <div className="rounded-lg bg-white p-4 shadow-md">
       <DnDCalendar
+        draggableAccessor={(event: any) => event.isDraggable === true}
         selectable
         components={components}
         localizer={localizer}
         defaultDate={new Date()}
         defaultView="day"
-        views={["day"]}
+        views={["day", "month"]}
         step={50}
         timeslots={1}
         resources={resourceMap}

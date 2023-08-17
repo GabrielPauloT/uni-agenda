@@ -1,4 +1,4 @@
-import { CustomCalendarEvent } from "@/config/types/type";
+import { CustomCalendarEvent } from "@/types/type";
 import { SlotInfo } from "react-big-calendar";
 import { withDragAndDropProps } from "react-big-calendar/lib/addons/dragAndDrop";
 

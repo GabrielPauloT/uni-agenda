@@ -1,6 +1,6 @@
 import React from "react";
 import { AppointmentStatusCode, EVENT_STATUS_COLORS } from "./const";
-import { Appointment } from "@/config/types/type";
+import { Appointment } from "@/types/type";
 
 export default function AppointmentEvent({
   appointment,
@@ -13,7 +13,7 @@ export default function AppointmentEvent({
       <div className="flex items-center justify-between">
         <div className="flex ">
           <p className="text-xs text-white">
-            Professor(a): {appointment?.professor}
+            Responsável: {appointment?.professor}
           </p>
         </div>
         {/* <div className="flex">
