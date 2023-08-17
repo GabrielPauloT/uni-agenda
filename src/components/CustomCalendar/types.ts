@@ -1,10 +1,13 @@
 import { CustomCalendarEvent } from "@/types/type";
-import { SlotInfo } from "react-big-calendar";
+import { SlotInfo, View } from "react-big-calendar";
 import { withDragAndDropProps } from "react-big-calendar/lib/addons/dragAndDrop";
 
 type CalendarEvent = {
   onSelectSlot: (slotInfo: SlotInfo) => void | undefined;
-  onSelectEvent: any;
+  onSelectEvent: (event: CustomCalendarEvent) => void | undefined;
+  resourceMap: { id: number; title: string }[];
+  views: View[];
+  defaultView: View;
 };
 
 type DnDType = CustomCalendarEvent &

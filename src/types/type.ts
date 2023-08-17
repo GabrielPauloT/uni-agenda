@@ -8,5 +8,5 @@ export type CustomCalendarEvent = {
   start?: Date;
   end?: Date;
   data?: { appointment: Appointment };
-  isDraggable: boolean;
+  isDraggable?: boolean;
 };
