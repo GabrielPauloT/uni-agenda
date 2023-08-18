@@ -12,9 +12,9 @@ import { CustomCalendarProps } from "./types";
 moment.locale("pt-br");
 
 const messages = {
-  today: "Hoje",
-  previous: "Voltar",
-  next: "Próximo",
+  today: "HOJE",
+  previous: "<",
+  next: ">",
 };
 
 const localizer = momentLocalizer(moment);
