@@ -15,6 +15,10 @@ const config: Config = {
       textColor: {
         "primary-100": "#00476C",
       },
+      fontFamily: {
+        inter: ["Inter", "sans-serif"],
+        nun: ["Nunito", "sans-serif"],
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
