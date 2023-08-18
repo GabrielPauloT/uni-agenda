@@ -4,10 +4,10 @@ import { Icons } from "../Icons";
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex">
-      <div className="relative min-h-screen w-60 bg-primary-100 p-4 shadow-md shadow-slate-900">
+    <div className="flex w-full">
+      <div className="relative min-h-screen min-w-fit bg-primary-100 p-4 shadow-md shadow-slate-900">
         <div className="mb-12 mt-10 flex items-center justify-center">
-          <div className="mr-2">
+          <div className="mx-5">
             <Image
               src="/logo/logoWhite2.svg"
               alt="logo_unipam"
@@ -47,7 +47,7 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
           </div>
         </nav>
       </div>
-      <main className="flex-1 p-8">{children}</main>
+      <main className="max-w-full flex-1 overflow-hidden p-8">{children}</main>
     </div>
   );
 }
