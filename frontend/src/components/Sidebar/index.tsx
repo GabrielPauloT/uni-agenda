@@ -6,7 +6,7 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex">
       <div className="relative min-h-screen w-60 bg-primary-100 p-4 shadow-md shadow-slate-900">
-        <div className="mb-12 mt-10 flex items-center justify-center">
+        <div className=" mb-12 mt-10 flex items-center justify-center">
           <div className="mr-2">
             <Image
               src="/logo/logoWhite2.svg"
