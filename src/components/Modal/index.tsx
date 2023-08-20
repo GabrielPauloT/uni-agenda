@@ -53,7 +53,7 @@
 //         setStart(editingEvent.start);
 //         setEnd(editingEvent.end);
 //         setResourceId(editingEvent.resourceId);
-    
+
 //         setEditingEvent(null);
 //     } else {
 //         setProfessor('');
