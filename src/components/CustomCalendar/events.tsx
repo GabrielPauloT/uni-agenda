@@ -13,7 +13,7 @@ export const EVENTS: CustomCalendarEvent[] = [
         professor: "Henaldo",
       },
     },
-    isDraggable: false,
+    isDraggable: true,
   },
   {
     resourceId: 2,
@@ -46,7 +46,7 @@ export const EVENTS: CustomCalendarEvent[] = [
     data: {
       appointment: {
         id: 4,
-        professor: "MatheuSÃO da JUJU",
+        professor: "Eder",
       },
     },
     isDraggable: true,
