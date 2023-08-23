@@ -66,32 +66,30 @@ export default function Calendar() {
   );
 
   return (
-    <div>
-      <CustomCalendar
-        defaultView="day"
-        views={["day"]}
-        resourceMap={resourceMap}
-        resizable
-        onEventDrop={({ start, end, event, resourceId }) => {
-          onChangeEventTime(
-            start as Date,
-            end as Date,
-            event?.data?.appointment?.id,
-            resourceId,
-          );
-        }}
-        onEventResize={({ start, end, event, resourceId }) => {
-          onChangeEventTime(
-            start as Date,
-            end as Date,
-            event?.data?.appointment?.id,
-            resourceId,
-          );
-        }}
-        event={events}
-        onSelectSlot={handleSelectSlot}
-        onSelectEvent={handleSelectEvent}
-      />
-    </div>
+    <CustomCalendar
+      defaultView="day"
+      views={["day"]}
+      resourceMap={resourceMap}
+      resizable
+      onEventDrop={({ start, end, event, resourceId }) => {
+        onChangeEventTime(
+          start as Date,
+          end as Date,
+          event?.data?.appointment?.id,
+          resourceId,
+        );
+      }}
+      onEventResize={({ start, end, event, resourceId }) => {
+        onChangeEventTime(
+          start as Date,
+          end as Date,
+          event?.data?.appointment?.id,
+          resourceId,
+        );
+      }}
+      event={events}
+      onSelectSlot={handleSelectSlot}
+      onSelectEvent={handleSelectEvent}
+    />
   );
 }
