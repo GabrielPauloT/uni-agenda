@@ -1,5 +1,5 @@
 "use client";
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import { Calendar, DateFormat, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
 import "moment/locale/pt-br";
@@ -12,14 +12,29 @@ import { CustomCalendarProps } from "./types";
 moment.locale("pt-br");
 
 const messages = {
-  today: "HOJE",
-  previous: "<",
-  next: ">",
+  today: "Hoje",
+  previous: "Voltar",
+  next: "Próximo",
 };
 
 const localizer = momentLocalizer(moment);
 
 const DnDCalendar = withDragAndDrop(Calendar);
+
+function handleData(data: Date) {
+  const today = new Date();
+  if (
+    data.getDate() === today.getDate() &&
+    data.getMonth() === today.getMonth() &&
+    data.getFullYear() === today.getFullYear()
+  ) {
+    return "Hoje" + moment(data).format(", DD/MM/YYYY");
+  }
+  return (
+    moment(data).format("ddd").charAt(0).toUpperCase() +
+    moment(data).format("dddd, DD/MM/YYYY").slice(1)
+  );
+}
 
 export default function CustomCalendar({
   event,
@@ -57,9 +72,7 @@ export default function CustomCalendar({
         timeslots={1}
         resources={resourceMap}
         formats={{
-          dayHeaderFormat: (date) =>
-            moment(date).format("ddd").charAt(0).toUpperCase() +
-            moment(date).format("dddd, DD/MM/YYYY").slice(1),
+          dayHeaderFormat: (date) => handleData(date),
         }}
         min={new Date(Year, 0, 1, 6, 0)}
         max={new Date(Year, 11, 31, 22, 50)}
