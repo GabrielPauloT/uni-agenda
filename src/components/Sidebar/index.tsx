@@ -25,7 +25,14 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
             >
               <Icons size={18} name="HiHome" /> <span>Salas</span>
             </Link>
-            <hr className="my-2 border-gray-300" />
+          </div>
+          <div>
+            <Link
+              className="ml-4 flex items-center gap-3 rounded-md p-2 text-white hover:bg-white hover:text-primary-100"
+              href="/Solicitantes"
+            >
+              <Icons size={18} name="IoPerson" /> Solicitantes
+            </Link>
           </div>
           <div>
             <Link
@@ -34,7 +41,6 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
             >
               <Icons size={18} name="MdReport" /> Relatório
             </Link>
-            <hr className="my-2 border-gray-300" />
           </div>
           <div>
             <Link
@@ -43,7 +49,6 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
             >
               <Icons size={18} name="ImExit" /> Sair
             </Link>
-            <hr className="my-2 border-gray-300" />
           </div>
         </nav>
       </div>
