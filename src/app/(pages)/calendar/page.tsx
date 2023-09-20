@@ -6,8 +6,15 @@ import moment from "moment";
 import { CustomCalendarEvent } from "@/types/type";
 import { SlotInfo } from "react-big-calendar";
 import { resourceMap } from "./const";
+import { Modal } from "@/components/Modal";
 
 export default function Calendar() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
   const [events, setEvents] = useState<CustomCalendarEvent[]>(EVENTS);
   const onChangeEventTime = useCallback(
     (
@@ -66,30 +73,36 @@ export default function Calendar() {
   );
 
   return (
-    <CustomCalendar
-      defaultView="day"
-      views={["day"]}
-      resourceMap={resourceMap}
-      resizable
-      onEventDrop={({ start, end, event, resourceId }) => {
-        onChangeEventTime(
-          start as Date,
-          end as Date,
-          event?.data?.appointment?.id,
-          resourceId,
-        );
-      }}
-      onEventResize={({ start, end, event, resourceId }) => {
-        onChangeEventTime(
-          start as Date,
-          end as Date,
-          event?.data?.appointment?.id,
-          resourceId,
-        );
-      }}
-      event={events}
-      onSelectSlot={handleSelectSlot}
-      onSelectEvent={handleSelectEvent}
-    />
+    <div>
+      <CustomCalendar
+        defaultView="day"
+        views={["day"]}
+        resourceMap={resourceMap}
+        resizable
+        onEventDrop={({ start, end, event, resourceId }) => {
+          onChangeEventTime(
+            start as Date,
+            end as Date,
+            event?.data?.appointment?.id,
+            resourceId,
+          );
+        }}
+        onEventResize={({ start, end, event, resourceId }) => {
+          onChangeEventTime(
+            start as Date,
+            end as Date,
+            event?.data?.appointment?.id,
+            resourceId,
+          );
+        }}
+        event={events}
+        onSelectSlot={handleSelectSlot}
+        onSelectEvent={openModal}
+      />
+      <Modal
+        onClose={() => setIsModalOpen(!isModalOpen)}
+        isOpen={isModalOpen}
+      />
+    </div>
   );
 }
