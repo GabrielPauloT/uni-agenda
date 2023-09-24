@@ -60,7 +60,7 @@ export default function CustomCalendar({
   const Year = new Date().getFullYear();
 
   return (
-    <div className="rounded-lg bg-white p-4 shadow-md">
+    <div className="mt-0 rounded-lg bg-white p-4 shadow-md max-md:ml-2 max-md:mt-16">
       <DnDCalendar
         draggableAccessor={(event: CustomCalendarEvent) =>
           event.isDraggable === true
