@@ -1,12 +1,19 @@
 "use client";
 import { Icons } from "@/components/Icons";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Cookie from "js-cookie";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleLogin() {}
+  const router = useRouter();
+
+  function handleLogin() {
+    Cookie.set("auth_token", "testekjsandlkansdlkasdm");
+    router.push("/calendar");
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
