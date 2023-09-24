@@ -19,6 +19,9 @@ const config: Config = {
         inter: ["Inter", "sans-serif"],
         nun: ["Nunito", "sans-serif"],
       },
+      width: {
+        "500": "31.25rem",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

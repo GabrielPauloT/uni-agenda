@@ -1,5 +1,5 @@
 "use client";
-import { Calendar, DateFormat, momentLocalizer } from "react-big-calendar";
+import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
 import "moment/locale/pt-br";
@@ -8,6 +8,7 @@ import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "./index.css";
 import AppointmentEvent from "../AppointmentEvent";
 import { CustomCalendarProps } from "./types";
+import { CustomCalendarEvent } from "@/types/type";
 
 moment.locale("pt-br");
 
@@ -61,7 +62,9 @@ export default function CustomCalendar({
   return (
     <div className="rounded-lg bg-white p-4 shadow-md">
       <DnDCalendar
-        draggableAccessor={(event: any) => event.isDraggable === true}
+        draggableAccessor={(event: CustomCalendarEvent) =>
+          event.isDraggable === true
+        }
         selectable
         components={components}
         localizer={localizer}
