@@ -1,5 +1,4 @@
-// @/components/DummyPage.js
-import { Layout } from "@/components/Sidebar/layout";
+import { Layout } from "@/components/Layout/layout";
 
 export default function Solicitantes() {
   return (

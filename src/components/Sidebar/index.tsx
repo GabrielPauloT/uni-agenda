@@ -5,11 +5,7 @@ import Image from "next/image";
 import { MenuItem } from "./MenuItem";
 import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
-
-type SidebarProps = {
-  show: boolean;
-  setter: React.Dispatch<React.SetStateAction<boolean>>;
-};
+import { SidebarProps } from "./types";
 
 export function Sidebar({ show, setter }: SidebarProps) {
   const oldVal = () => (oldVal: boolean) => !oldVal;
