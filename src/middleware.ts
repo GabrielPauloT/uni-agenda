@@ -4,7 +4,7 @@ export default function middleware(req: NextRequest) {
   const token = req.cookies.get("auth_token")?.value;
 
   const signInURL = new URL("/", req.url);
-  const calendarInURL = new URL("/calendario", req.url);
+  const calendarioInURL = new URL("/calendario", req.url);
 
   if (!token) {
     if (req.nextUrl.pathname === "/") {
@@ -15,7 +15,7 @@ export default function middleware(req: NextRequest) {
   }
 
   if (req.nextUrl.pathname === "/") {
-    return NextResponse.redirect(calendarInURL);
+    return NextResponse.redirect(calendarioInURL);
   }
 }
 

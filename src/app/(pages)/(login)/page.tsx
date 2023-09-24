@@ -12,7 +12,7 @@ export default function Login() {
 
   function handleLogin() {
     Cookie.set("auth_token", "testekjsandlkansdlkasdm");
-    router.push("/calendar");
+    router.push("/calendario");
   }
 
   return (
@@ -32,7 +32,7 @@ export default function Login() {
               type="email"
               id="email"
               className="w-full rounded border px-3 py-2 shadow"
-              placeholder="Seu email"
+              placeholder="example@unipam.edu.br"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
