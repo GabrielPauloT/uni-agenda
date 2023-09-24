@@ -7,6 +7,7 @@ import { CustomCalendarEvent } from "@/types/type";
 import { SlotInfo } from "react-big-calendar";
 import { resourceMap } from "./const";
 import { Modal } from "@/components/Modal";
+import { Layout } from "@/components/Sidebar/layout";
 
 export default function Calendar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -72,36 +73,38 @@ export default function Calendar() {
 
   return (
     <div>
-      <CustomCalendar
-        defaultView="day"
-        views={["day"]}
-        resourceMap={resourceMap}
-        resizable
-        onEventDrop={({ start, end, event, resourceId }) => {
-          onChangeEventTime(
-            start as Date,
-            end as Date,
-            event?.data?.appointment?.id,
-            resourceId,
-          );
-        }}
-        onEventResize={({ start, end, event, resourceId }) => {
-          onChangeEventTime(
-            start as Date,
-            end as Date,
-            event?.data?.appointment?.id,
-            resourceId,
-          );
-        }}
-        event={events}
-        onSelectSlot={handleSelectSlot}
-        onSelectEvent={handleSelectEvent}
-      />
-      <Modal
-        onClose={() => setIsModalOpen(!isModalOpen)}
-        isOpen={isModalOpen}
-        dados={data}
-      />
+      <Layout pageTitle="Agendamento">
+        <CustomCalendar
+          defaultView="day"
+          views={["day"]}
+          resourceMap={resourceMap}
+          resizable
+          onEventDrop={({ start, end, event, resourceId }) => {
+            onChangeEventTime(
+              start as Date,
+              end as Date,
+              event?.data?.appointment?.id,
+              resourceId,
+            );
+          }}
+          onEventResize={({ start, end, event, resourceId }) => {
+            onChangeEventTime(
+              start as Date,
+              end as Date,
+              event?.data?.appointment?.id,
+              resourceId,
+            );
+          }}
+          event={events}
+          onSelectSlot={handleSelectSlot}
+          onSelectEvent={handleSelectEvent}
+        />
+        <Modal
+          onClose={() => setIsModalOpen(!isModalOpen)}
+          isOpen={isModalOpen}
+          dados={data}
+        />
+      </Layout>
     </div>
   );
 }

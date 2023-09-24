@@ -1,13 +1,43 @@
-import Image from "next/image";
+"use client";
 import Link from "next/link";
-import { Icons } from "../Icons";
 
-export default function Sidebar({ children }: { children: React.ReactNode }) {
+import Image from "next/image";
+import { MenuItem } from "./MenuItem";
+import Cookie from "js-cookie";
+import { useRouter } from "next/navigation";
+
+type SidebarProps = {
+  show: boolean;
+  setter: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export function Sidebar({ show, setter }: SidebarProps) {
+  const oldVal = () => (oldVal: boolean) => !oldVal;
+  const router = useRouter();
+
+  function handleLogin() {
+    Cookie.remove("auth_token");
+    router.push("/");
+  }
+
+  const className =
+    "relative min-h-screen min-w-fit bg-primary-100 w-[250px] transition-[margin-left] ease-in-out duration-500 md:static top-0 bottom-0 left-0 z-40 px-5";
+  const appendClass = show ? " ml-0" : " ml-[-250px] md:ml-0";
+
+  const ModalOverlay = () => (
+    <div
+      className={`fixed bottom-0 left-0 right-0 top-0 z-30 flex bg-black/50 md:hidden`}
+      onClick={() => {
+        setter((oldVal: boolean) => !oldVal);
+      }}
+    />
+  );
+
   return (
-    <div className="flex w-full">
-      <div className="relative min-h-screen min-w-fit bg-primary-100 p-4 shadow-md shadow-slate-900">
-        <div className="mb-12 mt-10 flex items-center justify-center">
-          <div className="mx-5">
+    <>
+      <div className={`${className}${appendClass}`}>
+        <div className="mt-9 flex p-2">
+          <Link href="/">
             <Image
               src="/logo/logoWhite2.svg"
               alt="logo_unipam"
@@ -15,44 +45,33 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
               height={150}
               className="rounded-full"
             />
+          </Link>
+        </div>
+        <div className="mt-9 flex flex-col gap-2">
+          <MenuItem
+            setter={oldVal}
+            name="Salas"
+            route="/calendario"
+            icon="HiHome"
+          />
+          <MenuItem
+            setter={oldVal}
+            name="Solicitantes"
+            route="/solicitante"
+            icon="IoPerson"
+          />
+          <MenuItem
+            setter={oldVal}
+            name="Relatório"
+            route="/relatorio"
+            icon="MdReport"
+          />
+          <div onClick={() => handleLogin()}>
+            <MenuItem setter={oldVal} name="Sair" route="/" icon="ImExit" />
           </div>
         </div>
-        <nav className="space-y-4">
-          <div>
-            <Link
-              className="ml-4 flex items-center gap-3 rounded-md p-2 text-white hover:bg-white hover:text-primary-100"
-              href="/salas"
-            >
-              <Icons size={18} name="HiHome" /> <span>Salas</span>
-            </Link>
-          </div>
-          <div>
-            <Link
-              className="ml-4 flex items-center gap-3 rounded-md p-2 text-white hover:bg-white hover:text-primary-100"
-              href="/Solicitantes"
-            >
-              <Icons size={18} name="IoPerson" /> Solicitantes
-            </Link>
-          </div>
-          <div>
-            <Link
-              className="ml-4 flex items-center gap-3 rounded-md p-2 text-white hover:bg-white hover:text-primary-100"
-              href="/relatorio"
-            >
-              <Icons size={18} name="MdReport" /> Relatório
-            </Link>
-          </div>
-          <div>
-            <Link
-              className="ml-4 flex items-center gap-3 rounded-md p-2 text-white hover:bg-white hover:text-primary-100"
-              href="/sair"
-            >
-              <Icons size={18} name="ImExit" /> Sair
-            </Link>
-          </div>
-        </nav>
       </div>
-      <main className="max-w-full flex-1 overflow-hidden p-8">{children}</main>
-    </div>
+      {show ? <ModalOverlay /> : <></>}
+    </>
   );
 }
