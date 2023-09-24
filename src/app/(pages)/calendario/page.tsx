@@ -7,7 +7,7 @@ import { CustomCalendarEvent } from "@/types/type";
 import { SlotInfo } from "react-big-calendar";
 import { resourceMap } from "./const";
 import { Modal } from "@/components/Modal";
-import { Layout } from "@/components/Sidebar/layout";
+import { Layout } from "@/components/Layout/layout";
 
 export default function Calendar() {
   const [isModalOpen, setIsModalOpen] = useState(false);

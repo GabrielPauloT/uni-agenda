@@ -2,12 +2,8 @@
 import { useState } from "react";
 import Head from "next/head";
 import MenuBarMobile from "../MenuBarMobile/MenuBarMobile";
-import { Sidebar } from ".";
-
-type LayoutProps = {
-  pageTitle?: string;
-  children: React.ReactNode;
-};
+import { Sidebar } from "../Sidebar";
+import { LayoutProps } from "./types";
 
 export function Layout({ pageTitle, children }: LayoutProps) {
   let titleConcat = "Responsive Sidebar Example";
