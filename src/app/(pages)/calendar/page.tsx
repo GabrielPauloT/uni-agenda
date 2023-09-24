@@ -10,10 +10,7 @@ import { Modal } from "@/components/Modal";
 
 export default function Calendar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
+  const [data, setData] = useState<CustomCalendarEvent>();
 
   const [events, setEvents] = useState<CustomCalendarEvent[]>(EVENTS);
   const onChangeEventTime = useCallback(
@@ -67,9 +64,10 @@ export default function Calendar() {
   );
 
   const handleSelectEvent = useCallback(
-    ({ data }: CustomCalendarEvent) =>
-      window.alert(data?.appointment.professor),
-    [],
+    (data: CustomCalendarEvent) => {
+      setData(data), setIsModalOpen(!isModalOpen);
+    },
+    [isModalOpen],
   );
 
   return (
@@ -97,11 +95,12 @@ export default function Calendar() {
         }}
         event={events}
         onSelectSlot={handleSelectSlot}
-        onSelectEvent={openModal}
+        onSelectEvent={handleSelectEvent}
       />
       <Modal
         onClose={() => setIsModalOpen(!isModalOpen)}
         isOpen={isModalOpen}
+        dados={data}
       />
     </div>
   );
