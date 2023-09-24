@@ -1,108 +1,122 @@
-// import { CustomCalendarEvent } from '@/config/types/type';
-// import { useState, useEffect } from 'react';
+import { CustomCalendarEvent } from "@/types/type";
+import { ModalProps } from "./types";
+import { useState } from "react";
 
-// interface EventFormProps {
-//     addEvent: (event: CustomCalendarEvent) => void;
-//     showAddEventForm: boolean;
-//     editingEvent: CustomCalendarEvent | null;
-//     updateEvent: (event: CustomCalendarEvent) => void;
-//     setEditingEvent: (event: CustomCalendarEvent | null) => void;
-//   }
+export function Modal({ isOpen, onClose, onSave, dados }: ModalProps) {
+  const [eventData, setEventData] = useState<CustomCalendarEvent>(
+    dados || ({} as CustomCalendarEvent),
+  );
 
-// export default function EventForm({
-//     addEvent,
-//     showAddEventForm,
-//     editingEvent,
-//     updateEvent,
-//     setEditingEvent
-// }: EventFormProps) {
-//   const [professor, setProfessor] = useState('');
-//   const [start, setStart] = useState(new Date());
-//   const [end, setEnd] = useState(new Date());
-//   const [resourceId, setResourceId] = useState(1);
+  if (!isOpen) return null;
 
-//   useEffect(() => {
-//     if (editingEvent) {
-//       setProfessor(editingEvent.data.appointment.professor);
-//       setStart(editingEvent.start);
-//       setEnd(editingEvent.end);
-//       setResourceId(editingEvent.resourceId);
-//     } else {
-//       setProfessor('');
-//       setStart(new Date());
-//       setEnd(new Date());
-//       setResourceId(1);
-//     }
-//   }, [editingEvent]);
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
 
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault();
-//     const newEvent: CustomCalendarEvent = {
-//       data: {
-//         appointment: {
-//             professor,
-//         }
-//       },
-//       start,
-//       end,
-//       resourceId,
-//     };
+  //   setEventData((prevData) => {
+  //     const updatedAppointment = {
+  //       ...prevData.data?.appointment,
+  //       [name]: value,
+  //       professor: prevData.data?.appointment.professor || "",
+  //     };
 
-//     if (editingEvent) {
-//         setProfessor(editingEvent.data.appointment.professor);
-//         setStart(editingEvent.start);
-//         setEnd(editingEvent.end);
-//         setResourceId(editingEvent.resourceId);
+  //     return {
+  //       ...prevData,
+  //       data: {
+  //         appointment: updatedAppointment,
+  //       },
+  //     };
+  //   });
+  // };
 
-//         setEditingEvent(null);
-//     } else {
-//         setProfessor('');
-//         setStart(new Date());
-//         setEnd(new Date());
-//         setResourceId(1);
-//     }
+  const handleSave = () => {
+    if (onSave) {
+      onSave(eventData);
+    }
+    onClose();
+  };
 
-//     setProfessor('');
-//     setStart(new Date());
-//     setEnd(new Date());
-//     setResourceId(1);
-//     if (editingEvent) {
-//         setEditingEvent(null);
-//     }
-//   };
+  function formatDate(date: Date) {
+    var day = ("0" + date.getDate()).slice(-2);
+    var month = ("0" + (date.getMonth() + 1)).slice(-2);
+    var year = date.getFullYear();
+    var hours = ("0" + date.getHours()).slice(-2);
+    var minutes = ("0" + date.getMinutes()).slice(-2);
 
-//   if (!showAddEventForm) {
-//     return null;
-//   }
+    return year + "-" + month + "-" + day + "T" + hours + ":" + minutes;
+  }
 
-//   return (
-//     <div>
-//       <h2>{editingEvent ? 'Editar Evento' : 'Adicionar Novo Evento'}</h2>
-//       <form onSubmit={handleSubmit}>
-//         <input
-//           type="text"
-//           value={professor}
-//           onChange={(e) => setProfessor(e.target.value)}
-//           placeholder="Título"
-//         />
-//         <input
-//           type="datetime-local"
-//           value={start.toISOString().slice(0, -1)}
-//           onChange={(e) => setStart(new Date(e.target.value))}
-//         />
-//         <input
-//           type="datetime-local"
-//           value={end.toISOString().slice(0, -1)}
-//           onChange={(e) => setEnd(new Date(e.target.value))}
-//         />
-//         <select
-//           value={resourceId}
-//           onChange={(e) => setResourceId(Number(e.target.value))}
-//         >
-//           {/* Opções para selecionar o resourceId */}
-//         </select>
-//         <button type="submit">{editingEvent ? 'Editar' : 'Adicionar'}</button>
-//       </form>
-//     </div>
-//   );
-// }
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="fixed inset-0 bg-black opacity-50"></div>
+      <div className="z-50 w-500 rounded-lg bg-white p-4 shadow-lg">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold">Agendar Sala</h2>
+          <div className="mt-10 flex w-full items-center justify-center">
+            <label className="mr-5">Nome do Professor:</label>
+            <input
+              type="text"
+              placeholder="Nome do Professor"
+              value={dados?.data?.appointment.professor}
+              onChange={(e) =>
+                setEventData({
+                  ...eventData,
+                  data: {
+                    appointment: {
+                      professor: e.target.value,
+                    },
+                  },
+                })
+              }
+              className="select-none rounded-md border-2 border-gray-300 p-2"
+            />
+          </div>
+          <div className="mb-5 mt-5 flex gap-3">
+            <div>
+              <label className="mr-5">Data Inicio:</label>
+              <input
+                type="datetime-local"
+                placeholder="Data"
+                name="start"
+                value={dados?.start && formatDate(dados!.start!)}
+                onChange={(e) =>
+                  setEventData({
+                    ...eventData,
+                    start: new Date(e.target.value),
+                  })
+                }
+                className="rounded-md border-2 border-gray-300 p-2"
+              />
+            </div>
+            <div>
+              <label className="mr-5">Data Fim:</label>
+              <input
+                type="datetime-local"
+                placeholder="Data"
+                name="end"
+                value={dados?.start && formatDate(dados!.end!)}
+                onChange={(e) =>
+                  setEventData({ ...eventData, end: new Date(e.target.value) })
+                }
+                className="rounded-md border-2 border-gray-300 p-2"
+              />
+            </div>
+          </div>
+          <div className="flex justify-center gap-5">
+            <button
+              className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-primary-100"
+              onClick={handleSave}
+            >
+              Salvar
+            </button>
+            <button
+              className="mt-4 rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+              onClick={onClose}
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
