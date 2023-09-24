@@ -33,7 +33,7 @@ export default function Login() {
               id="email"
               className="w-full rounded border px-3 py-2 shadow"
               placeholder="example@unipam.edu.br"
-              value={email}
+              // value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -51,7 +51,7 @@ export default function Login() {
               id="password"
               className="w-full rounded border px-3 py-2 shadow"
               placeholder="Sua senha"
-              value={password}
+              // value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
