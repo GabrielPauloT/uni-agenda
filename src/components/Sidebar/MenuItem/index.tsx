@@ -1,14 +1,8 @@
 import { Icons } from "@/components/Icons";
-import * as IconsAllowed from "@/config/icons.config";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-type MenuProps = {
-  setter: React.Dispatch<React.SetStateAction<boolean>>;
-  icon: keyof typeof IconsAllowed;
-  name: string;
-  route: string;
-};
+import { MenuProps } from "./types";
 
 export function MenuItem({ icon, name, route, setter }: MenuProps) {
   const pathname = usePathname();
@@ -21,7 +15,7 @@ export function MenuItem({ icon, name, route, setter }: MenuProps) {
     <Link
       href={route}
       onClick={() => {
-        setter(setter as unknown as boolean);
+        setter((prevState: boolean) => !prevState);
       }}
       className={`text-md flex gap-1 border-b-white/10 py-3 pl-6 [&>*]:my-auto ${colorClass}`}
     >

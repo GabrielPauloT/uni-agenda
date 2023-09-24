@@ -1,13 +1,9 @@
 import Link from "next/link";
-import { FiMenu as Icon } from "react-icons/fi";
-import { FaUser } from "react-icons/fa";
 import Image from "next/image";
+import { MenuBarMobileProps } from "./types";
+import { Icons } from "../Icons";
 
-type SidebarProps = {
-  setter: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export default function MenuBarMobile({ setter }: SidebarProps) {
+export default function MenuBarMobile({ setter }: MenuBarMobileProps) {
   return (
     <nav className="fixed left-0 right-0 top-0 z-20 flex h-[60px] bg-primary-100 px-2 md:hidden [&>*]:my-auto">
       <button
@@ -16,7 +12,7 @@ export default function MenuBarMobile({ setter }: SidebarProps) {
           setter((oldVal) => !oldVal);
         }}
       >
-        <Icon />
+        <Icons size={40} name="MdOutlineMenu" />
       </button>
       <Link href="/" className="mx-auto">
         <Image
@@ -26,9 +22,6 @@ export default function MenuBarMobile({ setter }: SidebarProps) {
           height={150}
           className="rounded-full"
         />
-      </Link>
-      <Link className="flex text-3xl text-white" href="/login">
-        <FaUser />
       </Link>
     </nav>
   );
