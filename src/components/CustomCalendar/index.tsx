@@ -80,6 +80,7 @@ export default function CustomCalendar({
         min={new Date(Year, 0, 1, 6, 0)}
         max={new Date(Year, 11, 31, 22, 50)}
         messages={messages}
+        onRangeChange={(range) => console.log(range)}
         resizable={resizable}
         onEventResize={onEventResize}
         onEventDrop={onEventDrop}
