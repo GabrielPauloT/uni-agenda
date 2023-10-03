@@ -2,7 +2,7 @@
 import { Icons } from "@/components/Icons";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Cookie from "js-cookie";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,7 +11,7 @@ export default function Login() {
   const router = useRouter();
 
   function handleLogin() {
-    Cookie.set("auth_token", "testekjsandlkansdlkasdm");
+    Cookies.set("auth_token", "testekjsandlkansdlkasdm");
     router.push("/calendario");
   }
 

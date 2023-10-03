@@ -52,4 +52,16 @@ export const EVENTS: CustomCalendarEvent[] = [
     },
     isDraggable: true,
   },
+  {
+    resourceId: 5,
+    start: new Date(2023, month, 2, 10, 0),
+    end: new Date(2023, month, 2, 13, 50, 0),
+    data: {
+      appointment: {
+        id: 4,
+        professor: "Eder",
+      },
+    },
+    isDraggable: true,
+  },
 ];
