@@ -8,6 +8,8 @@ import { SlotInfo } from "react-big-calendar";
 import { resourceMap } from "./const";
 import { Modal } from "@/components/Modal";
 import { Layout } from "@/components/Layout/layout";
+import { AgendamentoQuery, UsuarioQuery } from "@/service/query";
+import { UsuarioRquest } from "@/service/requests";
 
 export default function Calendar() {
   const [isModalOpen, setIsModalOpen] = useState(false);

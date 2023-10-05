@@ -1,20 +1,18 @@
 "use client";
 import { DataTable } from "@/components/DataTable";
 import { Layout } from "@/components/Layout/layout";
-import { SolicitanteQuery } from "@/service/query";
-import { Solicitante, Usuario } from "@/service/types";
+import { SalaQuery } from "@/service/query";
+import { Sala } from "@/service/types";
+import { tipoSala } from "@/types/enums/enums";
 import { useState } from "react";
 
-export default function Solicitantes() {
+export default function Sala() {
   const [page, setPage] = useState(1);
   const perPage = 6;
 
-  const { data: solicitanteData } = SolicitanteQuery.useFindAllSolicitante(
-    page,
-    perPage,
-  );
+  const { data: salaData } = SalaQuery.useFindAllSala(page, perPage);
 
-  const { data: gambiarra } = SolicitanteQuery.useFindAllSolicitante(1, 100);
+  const { data: gambiarra } = SalaQuery.useFindAllSala(1, 100);
 
   const onNextPageClick = () => {
     setPage(page + 1);
@@ -24,48 +22,48 @@ export default function Solicitantes() {
     setPage(page - 1);
   };
 
-  const onEditClick = (row: Solicitante) => {
+  const onEditClick = (row: Sala) => {
     console.log(row);
   };
 
-  const onDeleteClick = (row: Solicitante) => {
+  const onDeleteClick = (row: Sala) => {
     console.log(row);
   };
 
-  const onViewClick = (row: Solicitante) => {
+  const onViewClick = (row: Sala) => {
     console.log(row);
   };
 
-  const [isAddingUser, setIsAddingUser] = useState(false);
+  const [isAddingSala, setIsAddingSala] = useState(false);
 
-  const onAddUserClick = () => {
-    setIsAddingUser(true);
+  const onAddSalaClick = () => {
+    setIsAddingSala(true);
   };
 
-  const formattedData = solicitanteData?.map((solicitante) => ({
-    ...solicitante,
-    createdat: new Date(solicitante.createdat).toLocaleDateString("pt-BR"),
-    updatedat: new Date(solicitante.updatedat).toLocaleDateString("pt-BR"),
+  const formattedData = salaData?.map((sala) => ({
+    ...sala,
+    createdat: new Date(sala.createdat).toLocaleDateString("pt-BR"),
+    updatedat: new Date(sala.updatedat).toLocaleDateString("pt-BR"),
   }));
 
   const TotalRecord = gambiarra?.length;
 
   return (
-    <Layout pageTitle="Solicitante">
+    <Layout pageTitle="Sala">
       <div className="flex min-h-screen flex-col justify-center text-center align-middle">
         <h1 className="mb-12 mt-6 text-3xl font-semibold tracking-wide">
-          Solicitante
+          Sala
         </h1>
         <div className="m-auto h-full w-full flex-grow overflow-auto">
           <div className="mr-4 flex justify-end">
             <button
-              onClick={onAddUserClick}
+              onClick={onAddSalaClick}
               className="rounded bg-green-600 px-4 py-2 font-bold text-white hover:bg-green-700"
             >
-              Adicionar Novo Solicitante
+              Adicionar Nova Sala
             </button>
           </div>
-          {solicitanteData ? (
+          {salaData ? (
             <DataTable
               data={formattedData}
               page={page}

@@ -6,6 +6,7 @@ import { MenuItem } from "./MenuItem";
 import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import { SidebarProps } from "./types";
+import { SidebarMenu } from "./const";
 
 export function Sidebar({ show, setter }: SidebarProps) {
   const oldVal = () => (oldVal: boolean) => !oldVal;
@@ -44,26 +45,17 @@ export function Sidebar({ show, setter }: SidebarProps) {
           </Link>
         </div>
         <div className="mt-9 flex flex-col gap-2">
-          <MenuItem
-            setter={oldVal}
-            name="Salas"
-            route="/calendario"
-            icon="HiHome"
-          />
-          <MenuItem
-            setter={oldVal}
-            name="Solicitantes"
-            route="/solicitante"
-            icon="IoPerson"
-          />
-          <MenuItem
-            setter={oldVal}
-            name="Relatório"
-            route="/relatorio"
-            icon="MdReport"
-          />
+          {SidebarMenu.map((item) => (
+            <MenuItem
+              key={item.id}
+              setter={oldVal}
+              title={item.title}
+              path={item.path}
+              icon={item.icon}
+            />
+          ))}
           <div onClick={() => handleLogin()}>
-            <MenuItem setter={oldVal} name="Sair" route="/" icon="ImExit" />
+            <MenuItem setter={oldVal} title="Sair" path="/" icon="ImExit" />
           </div>
         </div>
       </div>
