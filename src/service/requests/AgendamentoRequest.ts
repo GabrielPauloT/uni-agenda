@@ -1,6 +1,6 @@
 import { ApiResult } from "@/types/API";
 import { api } from "../api";
-import { Agendamento } from "../types/Agendamento";
+import { Agendamento } from "../types";
 
 export function findAllAgendamento(page: number, perPage: number) {
   return api.get<ApiResult<Agendamento[]>>(

@@ -1,20 +1,17 @@
 "use client";
 import { DataTable } from "@/components/DataTable";
 import { Layout } from "@/components/Layout/layout";
-import { SolicitanteQuery } from "@/service/query";
-import { Solicitante, Usuario } from "@/service/types";
+import { UsuarioQuery } from "@/service/query";
+import { Usuario } from "@/service/types";
 import { useState } from "react";
 
-export default function Solicitantes() {
+export default function Usuario() {
   const [page, setPage] = useState(1);
   const perPage = 6;
 
-  const { data: solicitanteData } = SolicitanteQuery.useFindAllSolicitante(
-    page,
-    perPage,
-  );
+  const { data: usuarioData } = UsuarioQuery.useFindAllSala(page, perPage);
 
-  const { data: gambiarra } = SolicitanteQuery.useFindAllSolicitante(1, 100);
+  const { data: gambiarra } = UsuarioQuery.useFindAllSala(1, 100);
 
   const onNextPageClick = () => {
     setPage(page + 1);
@@ -24,15 +21,15 @@ export default function Solicitantes() {
     setPage(page - 1);
   };
 
-  const onEditClick = (row: Solicitante) => {
+  const onEditClick = (row: Usuario) => {
     console.log(row);
   };
 
-  const onDeleteClick = (row: Solicitante) => {
+  const onDeleteClick = (row: Usuario) => {
     console.log(row);
   };
 
-  const onViewClick = (row: Solicitante) => {
+  const onViewClick = (row: Usuario) => {
     console.log(row);
   };
 
@@ -42,19 +39,19 @@ export default function Solicitantes() {
     setIsAddingUser(true);
   };
 
-  const formattedData = solicitanteData?.map((solicitante) => ({
-    ...solicitante,
-    createdat: new Date(solicitante.createdat).toLocaleDateString("pt-BR"),
-    updatedat: new Date(solicitante.updatedat).toLocaleDateString("pt-BR"),
+  const formattedData = usuarioData?.map((usuario) => ({
+    ...usuario,
+    createdat: new Date(usuario.createdat).toLocaleDateString("pt-BR"),
+    updatedat: new Date(usuario.updatedat).toLocaleDateString("pt-BR"),
   }));
 
   const TotalRecord = gambiarra?.length;
 
   return (
-    <Layout pageTitle="Solicitante">
+    <Layout pageTitle="Usuario">
       <div className="flex min-h-screen flex-col justify-center text-center align-middle">
         <h1 className="mb-12 mt-6 text-3xl font-semibold tracking-wide">
-          Solicitante
+          Usuario
         </h1>
         <div className="m-auto h-full w-full flex-grow overflow-auto">
           <div className="mr-4 flex justify-end">
@@ -62,10 +59,10 @@ export default function Solicitantes() {
               onClick={onAddUserClick}
               className="rounded bg-green-600 px-4 py-2 font-bold text-white hover:bg-green-700"
             >
-              Adicionar Novo Solicitante
+              Adicionar Novo Usuário
             </button>
           </div>
-          {solicitanteData ? (
+          {usuarioData ? (
             <DataTable
               data={formattedData}
               page={page}

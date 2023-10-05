@@ -4,7 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MenuProps } from "./types";
 
-export function MenuItem({ icon, name, route, setter }: MenuProps) {
+export function MenuItem({
+  icon,
+  title: name,
+  path: route,
+  setter,
+}: MenuProps) {
   const pathname = usePathname();
   const colorClass =
     pathname === route
