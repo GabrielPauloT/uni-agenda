@@ -1,4 +1,4 @@
-import { ApiResult } from "@/types/API";
+import { ApiResult } from "@/@types/API/ApiResult";
 import { api } from "../api";
 import { Solicitante } from "../types";
 

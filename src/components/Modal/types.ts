@@ -1,4 +1,4 @@
-import { CustomCalendarEvent } from "@/types/type";
+import { CustomCalendarEvent } from "@/@types/type";
 
 export type ModalProps = {
   isOpen: boolean;

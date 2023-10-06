@@ -8,7 +8,7 @@ import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "./index.css";
 import AppointmentEvent from "../AppointmentEvent";
 import { CustomCalendarProps } from "./types";
-import { CustomCalendarEvent } from "@/types/type";
+import { CustomCalendarEvent } from "@/@types/type";
 
 moment.locale("pt-br");
 
