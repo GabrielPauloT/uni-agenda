@@ -73,7 +73,7 @@ export default function Agenda() {
 
   return (
     <div>
-      <Layout pageTitle="Agendamento">
+      <Layout pageTitle="Agenda">
         <CustomCalendar
           defaultView="day"
           views={["day"]}
