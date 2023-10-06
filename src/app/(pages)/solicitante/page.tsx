@@ -65,21 +65,17 @@ export default function Solicitantes() {
               Adicionar Novo Solicitante
             </button>
           </div>
-          {solicitanteData ? (
-            <DataTable
-              data={formattedData}
-              page={page}
-              total={TotalRecord}
-              perPage={perPage}
-              onNextPageClick={onNextPageClick}
-              onBackPageClick={onBackPageClick}
-              onEditClick={onEditClick}
-              onDeleteClick={onDeleteClick}
-              onViewClick={onViewClick}
-            />
-          ) : (
-            <p>Loading...</p>
-          )}
+          <DataTable
+            data={formattedData}
+            page={page}
+            total={TotalRecord}
+            perPage={perPage}
+            onNextPageClick={onNextPageClick}
+            onBackPageClick={onBackPageClick}
+            onEditClick={onEditClick}
+            onDeleteClick={onDeleteClick}
+            onViewClick={onViewClick}
+          />
         </div>
       </div>
     </Layout>
