@@ -3,7 +3,6 @@ import { DataTable } from "@/components/DataTable";
 import { Layout } from "@/components/Layout/layout";
 import { SalaQuery } from "@/service/query";
 import { Sala } from "@/service/types";
-import { tipoSala } from "@/@types/enums/enums";
 import { useState } from "react";
 
 export default function Sala() {
