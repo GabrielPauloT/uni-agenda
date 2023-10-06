@@ -3,7 +3,7 @@ import { useState } from "react";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 
 import { UseApiQueryResult } from "./types";
-import { ApiResult } from "@/types/API";
+import { ApiResult } from "@/@types/API/ApiResult";
 
 export function useApiQuery<
   ResultType = unknown,

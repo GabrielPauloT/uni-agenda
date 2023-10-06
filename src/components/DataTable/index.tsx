@@ -1,5 +1,6 @@
 import React from "react";
 import { Icons } from "../Icons";
+import { Spinner } from "../Spinner";
 
 export type DataTableProps = {
   data: any[] | undefined;
@@ -27,14 +28,18 @@ export function DataTable({
   const totalPages = Math.ceil((total ?? 0) / perPage);
 
   if (!data || data.length === 0) {
-    return <p>Nenhum dado disponível.</p>;
+    return (
+      <div className="m-auto flex h-96 w-auto items-center justify-center">
+        <Spinner />
+      </div>
+    );
   }
 
   const columns = Object.keys(data[0]);
 
   return (
     <div className="flex h-full w-full flex-col p-4">
-      <table className="max-h-full w-full table-auto border-collapse">
+      <table className="max-h-full w-full table-auto border-collapse rounded-full border">
         <thead>
           <tr className="bg-gray-200">
             {columns.map((column) => (

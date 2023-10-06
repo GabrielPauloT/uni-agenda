@@ -1,6 +1,6 @@
 import React from "react";
 import { AppointmentStatusCode, EVENT_STATUS_COLORS } from "./const";
-import { Appointment } from "@/types/type";
+import { Appointment } from "@/@types/type";
 
 export default function AppointmentEvent({
   appointment,

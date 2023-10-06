@@ -1,4 +1,4 @@
-import { ReactQueryKeysEnum } from "@/types/enums/reactQuery";
+import { ReactQueryKeysEnum } from "@/@types/enums/reactQuery";
 import { useApiQuery } from "../hooks/Query";
 import { SalaRequest } from "../requests";
 import { Sala } from "../types";

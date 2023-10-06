@@ -9,7 +9,6 @@ const config: Config = {
   theme: {
     extend: {
       backgroundColor: {
-        teste: "rgb(214, 219, 220)",
         "primary-100": "#00476C",
       },
       textColor: {
@@ -21,6 +20,9 @@ const config: Config = {
       },
       width: {
         "500": "31.25rem",
+      },
+      border: {
+        "primary-100": "#00476C",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

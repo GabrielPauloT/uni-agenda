@@ -1,4 +1,4 @@
-import { ReactQueryKeysEnum } from "@/types/enums/reactQuery";
+import { ReactQueryKeysEnum } from "@/@types/enums/reactQuery";
 import { useApiQuery } from "../hooks/Query";
 import { Agendamento } from "../types/Agendamento";
 import { AgendamentoRequest } from "../requests";

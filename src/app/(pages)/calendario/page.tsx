@@ -3,7 +3,7 @@ import CustomCalendar from "@/components/CustomCalendar";
 import { useCallback, useState } from "react";
 import { EVENTS } from "@/components/CustomCalendar/events";
 import moment from "moment";
-import { CustomCalendarEvent } from "@/types/type";
+import { CustomCalendarEvent } from "@/@types/type";
 import { SlotInfo } from "react-big-calendar";
 import { resourceMap } from "./const";
 import { Modal } from "@/components/Modal";
