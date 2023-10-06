@@ -62,21 +62,17 @@ export default function Sala() {
               Adicionar Nova Sala
             </button>
           </div>
-          {salaData ? (
-            <DataTable
-              data={formattedData}
-              page={page}
-              total={TotalRecord}
-              perPage={perPage}
-              onNextPageClick={onNextPageClick}
-              onBackPageClick={onBackPageClick}
-              onEditClick={onEditClick}
-              onDeleteClick={onDeleteClick}
-              onViewClick={onViewClick}
-            />
-          ) : (
-            <p>Loading...</p>
-          )}
+          <DataTable
+            data={formattedData}
+            page={page}
+            total={TotalRecord}
+            perPage={perPage}
+            onNextPageClick={onNextPageClick}
+            onBackPageClick={onBackPageClick}
+            onEditClick={onEditClick}
+            onDeleteClick={onDeleteClick}
+            onViewClick={onViewClick}
+          />
         </div>
       </div>
     </Layout>

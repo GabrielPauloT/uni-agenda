@@ -4,9 +4,9 @@ export const SidebarMenu: MenuProps[] = [
   {
     id: 1,
     setter: () => {},
-    title: "Agendamentos",
+    title: "Agenda",
     icon: "IoCalendarSharp",
-    path: "/calendario",
+    path: "/agenda",
     roles: ["user"],
   },
   {
