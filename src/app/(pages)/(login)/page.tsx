@@ -12,7 +12,7 @@ export default function Login() {
 
   function handleLogin() {
     Cookies.set("auth_token", "testekjsandlkansdlkasdm");
-    router.push("/calendario");
+    router.push("/agenda");
   }
 
   return (
