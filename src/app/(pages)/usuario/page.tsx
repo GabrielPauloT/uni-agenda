@@ -9,9 +9,9 @@ export default function Usuario() {
   const [page, setPage] = useState(1);
   const perPage = 6;
 
-  const { data: usuarioData } = UsuarioQuery.useFindAllSala(page, perPage);
+  const { data: usuarioData } = UsuarioQuery.useFindAllUsuario(page, perPage);
 
-  const { data: gambiarra } = UsuarioQuery.useFindAllSala(1, 100);
+  const { data: gambiarra } = UsuarioQuery.useFindAllUsuario(1, 100);
 
   const onNextPageClick = () => {
     setPage(page + 1);

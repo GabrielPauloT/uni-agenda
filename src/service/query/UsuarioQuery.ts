@@ -3,7 +3,7 @@ import { useApiQuery } from "../hooks/Query";
 import { UsuarioRquest } from "../requests";
 import { Usuario } from "../types";
 
-export function useFindAllSala(page: number, perPage: number) {
+export function useFindAllUsuario(page: number, perPage: number) {
   return useApiQuery<Usuario[]>({
     queryKey: [ReactQueryKeysEnum.USUARIO_FINDALL, page, perPage],
     queryFn: async () => {
