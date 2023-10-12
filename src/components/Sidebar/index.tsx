@@ -1,12 +1,12 @@
 "use client";
-import Link from "next/link";
-
-import Image from "next/image";
-import { MenuItem } from "./MenuItem";
 import Cookie from "js-cookie";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { SidebarProps } from "./types";
+
 import { SidebarMenu } from "./const";
+import { MenuItem } from "./MenuItem";
+import { SidebarProps } from "./types";
 
 export function Sidebar({ show, setter }: SidebarProps) {
   const oldVal = () => (oldVal: boolean) => !oldVal;

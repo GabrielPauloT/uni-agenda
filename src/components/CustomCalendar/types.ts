@@ -1,6 +1,7 @@
-import { CustomCalendarEvent } from "@/@types/type";
 import { SlotInfo, View } from "react-big-calendar";
 import { withDragAndDropProps } from "react-big-calendar/lib/addons/dragAndDrop";
+
+import { CustomCalendarEvent } from "@/@types/components/Calendario";
 
 type CalendarEvent = {
   onSelectSlot: (slotInfo: SlotInfo) => void | undefined;

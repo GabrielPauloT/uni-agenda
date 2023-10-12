@@ -1,7 +1,9 @@
-import Link from "next/link";
 import Image from "next/image";
-import { MenuBarMobileProps } from "./types";
+import Link from "next/link";
+
 import { Icons } from "../Icons";
+
+import { MenuBarMobileProps } from "./types";
 
 export default function MenuBarMobile({ setter }: MenuBarMobileProps) {
   return (

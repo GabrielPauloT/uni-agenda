@@ -1,4 +1,4 @@
-import { CustomCalendarEvent } from "@/@types/type";
+import { CustomCalendarEvent } from "@/@types/components/Calendario";
 
 const day = new Date().getUTCDate();
 const month = new Date().getUTCMonth();

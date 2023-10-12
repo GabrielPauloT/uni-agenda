@@ -1,14 +1,22 @@
 "use client";
-import { DataTable } from "@/components/DataTable";
-import { Input } from "@/components/Input";
-import { Layout } from "@/components/Layout/layout";
-import { Modal } from "@/components/Modal";
-import { UsuarioQuery } from "@/service/query";
-import { useCreateUsuario } from "@/service/query/UsuarioQuery";
-import { Usuario } from "@/service/types";
 import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+
+import { DataTable } from "@/components/DataTable";
+import { Input } from "@/components/Input";
+import { Layout } from "@/components/Layout";
+import { Modal } from "@/components/Modal";
+import { UsuarioQuery } from "@/service/hooks";
+import { useCreateUsuario } from "@/service/hooks/UsuarioQuery";
+
 import { dataUsuario, formUsuario } from "./type";
+
+const PER_PAGE = 6;
+const DEFAULT_USER_DATA = {
+  Nome: "",
+  Email: "",
+  Senha: "",
+};
 
 export default function Usuario() {
   const [page, setPage] = useState(1);
@@ -16,34 +24,28 @@ export default function Usuario() {
   const [openModal, setOpenModal] = useState(false);
   const [openModalView, setOpenModalView] = useState(false);
   const formMethods = useForm<formUsuario>();
-  const [data, setData] = useState({
-    Nome: "",
-    Email: "",
-    Senha: "",
-  });
-  const perPage = 10;
+  const [userData, setUserData] = useState(DEFAULT_USER_DATA);
+
+  const resetData = () => {
+    setUserData(DEFAULT_USER_DATA);
+  };
+
   const closeModal = () => {
     formMethods.reset();
-    setData({
-      Nome: "",
-      Email: "",
-      Senha: "",
-    });
+    resetData();
     setOpenModalView(false);
     setOpenModal(false);
   };
-  const { data: usuarioData } = UsuarioQuery.useFindAllUsuario(page, perPage);
+  const { data: usuarioData } = UsuarioQuery.useFindAllUsuario(page, PER_PAGE);
 
   const createUsuarioMutation = useCreateUsuario();
 
-  const { data: gambiarra } = UsuarioQuery.useFindAllUsuario(1, 100);
-
   const onEditClick = (row: dataUsuario) => {
     setTitle("Editar Usuario");
-    setData({
+    setUserData({
       Nome: row.nome,
       Email: row.email,
-      Senha: row.senha || "",
+      Senha: "",
     });
     setOpenModal(true);
   };
@@ -54,10 +56,10 @@ export default function Usuario() {
 
   const onViewClick = (row: dataUsuario) => {
     setTitle("Visualizar Usuario");
-    setData({
+    setUserData({
       Nome: row.nome,
       Email: row.email,
-      Senha: row.senha || "",
+      Senha: "",
     });
     setOpenModalView(true);
     setOpenModal(true);
@@ -68,7 +70,7 @@ export default function Usuario() {
     setOpenModal(true);
   };
 
-  const formattedData = usuarioData?.map((usuario) => ({
+  const formattedData = usuarioData?.Result.map((usuario) => ({
     ...usuario,
     createdat: usuario?.createdat
       ? new Date(usuario.createdat).toLocaleDateString("pt-BR")
@@ -77,8 +79,6 @@ export default function Usuario() {
       ? new Date(usuario.updatedat).toLocaleDateString("pt-BR")
       : new Date().toLocaleDateString("pt-BR"),
   }));
-
-  const TotalRecord = gambiarra?.length || 0;
 
   const onSubmit: SubmitHandler<formUsuario> = (data) => {
     createUsuarioMutation.mutateAsync(data);
@@ -106,13 +106,13 @@ export default function Usuario() {
                     <p className="text-lg font-medium text-gray-900">
                       Nome:{" "}
                       <span className="font-light text-gray-500">
-                        {data.Nome}
+                        {userData.Nome}
                       </span>
                     </p>
                     <p className="text-lg font-medium text-gray-900">
                       Email:{" "}
                       <span className="font-light text-gray-500">
-                        {data.Email}
+                        {userData.Email}
                       </span>
                     </p>
                     <p className="text-lg font-medium text-gray-900">
@@ -142,10 +142,10 @@ export default function Usuario() {
                       placeholder="Nome"
                       id="Nome"
                       name="Nome"
-                      value={data.Nome || ""}
+                      value={userData.Nome || ""}
                       onChange={(e) =>
-                        setData({
-                          ...data,
+                        setUserData({
+                          ...userData,
                           Nome: e.target.value,
                         })
                       }
@@ -156,10 +156,10 @@ export default function Usuario() {
                       placeholder="Email"
                       id="Email"
                       name="Email"
-                      value={data.Email || ""}
+                      value={userData.Email || ""}
                       onChange={(e) =>
-                        setData({
-                          ...data,
+                        setUserData({
+                          ...userData,
                           Email: e.target.value,
                         })
                       }
@@ -170,10 +170,10 @@ export default function Usuario() {
                       placeholder="Senha"
                       id="Senha"
                       name="Senha"
-                      value={data.Senha || ""}
+                      value={userData.Senha || ""}
                       onChange={(e) =>
-                        setData({
-                          ...data,
+                        setUserData({
+                          ...userData,
                           Senha: e.target.value,
                         })
                       }
@@ -201,10 +201,10 @@ export default function Usuario() {
           <DataTable
             data={formattedData}
             page={page}
-            total={TotalRecord}
-            perPage={perPage}
-            onNextPageClick={() => setPage(page + 1)}
-            onBackPageClick={() => setPage(page - 1)}
+            total={usuarioData?.TotalRecords}
+            perPage={PER_PAGE}
+            onNextPageClick={() => setPage((page) => page + 1)}
+            onBackPageClick={() => setPage((page) => page - 1)}
             onEditClick={onEditClick}
             onDeleteClick={onDeleteClick}
             onViewClick={onViewClick}

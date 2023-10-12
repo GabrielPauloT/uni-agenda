@@ -1,8 +1,10 @@
 "use client";
-import { Icons } from "@/components/Icons";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+
+import { Icons } from "@/components";
 
 export default function Login() {
   const [email, setEmail] = useState("");

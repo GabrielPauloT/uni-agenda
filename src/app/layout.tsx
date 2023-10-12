@@ -1,10 +1,15 @@
 "use client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./globals.css";
+
+import moment from "moment";
 import { Inter } from "next/font/google";
+
 import { reactQueryConfig } from "@/config/reactQuery";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const inter = Inter({ subsets: ["latin"] });
+
+moment.locale("pt-br");
 
 const queryClient = new QueryClient(reactQueryConfig);
 

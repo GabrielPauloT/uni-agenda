@@ -1,6 +1,8 @@
-import { CustomCalendarEvent } from "@/@types/type";
-import { ModalProps } from "./types";
 import { useState } from "react";
+
+import { CustomCalendarEvent } from "@/@types/components/Calendario";
+
+import { ModalProps } from "./types";
 
 export function Modal2({ isOpen, onClose, onSave, dados }: ModalProps) {
   const [eventData, setEventData] = useState<CustomCalendarEvent>(

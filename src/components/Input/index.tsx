@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
+
 import { InputProps } from "./type";
-import { useEffect } from "react";
 
 export function Input({
   value,

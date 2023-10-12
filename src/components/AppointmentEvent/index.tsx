@@ -1,6 +1,7 @@
 import React from "react";
-import { AppointmentStatusCode, EVENT_STATUS_COLORS } from "./const";
-import { Appointment } from "@/@types/type";
+
+// import { AppointmentStatusCode, EVENT_STATUS_COLORS } from "./const";
+import { Appointment } from "@/@types/components/Calendario";
 
 export default function AppointmentEvent({
   appointment,

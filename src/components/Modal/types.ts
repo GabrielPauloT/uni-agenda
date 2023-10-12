@@ -1,5 +1,6 @@
-import { CustomCalendarEvent } from "@/@types/type";
 import { ReactNode } from "react";
+
+import { CustomCalendarEvent } from "@/@types/components/Calendario";
 
 export type ModalProps = {
   isOpen: boolean;

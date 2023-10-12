@@ -1,7 +1,8 @@
-import { Icons } from "@/components/Icons";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import { Icons } from "@/components/Icons";
+
 import { MenuProps } from "./types";
 
 export function MenuItem({

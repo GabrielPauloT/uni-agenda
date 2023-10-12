@@ -1,9 +1,10 @@
 "use client";
-import { DataTable } from "@/components/DataTable";
-import { Layout } from "@/components/Layout/layout";
-import { SolicitanteQuery } from "@/service/query";
-import { Solicitante, Usuario } from "@/service/types";
 import { useState } from "react";
+
+import { DataTable } from "@/components/DataTable";
+import { Layout } from "@/components/Layout";
+import { SolicitanteQuery } from "@/service/hooks";
+import { Solicitante } from "@/service/types";
 
 export default function Solicitantes() {
   const [page, setPage] = useState(1);
@@ -13,8 +14,6 @@ export default function Solicitantes() {
     page,
     perPage,
   );
-
-  const { data: gambiarra } = SolicitanteQuery.useFindAllSolicitante(1, 100);
 
   const onNextPageClick = () => {
     setPage(page + 1);
@@ -42,13 +41,11 @@ export default function Solicitantes() {
     setIsAddingUser(true);
   };
 
-  const formattedData = solicitanteData?.map((solicitante) => ({
+  const formattedData = solicitanteData?.Result.map((solicitante) => ({
     ...solicitante,
     createdat: new Date(solicitante.createdat).toLocaleDateString("pt-BR"),
     updatedat: new Date(solicitante.updatedat).toLocaleDateString("pt-BR"),
   }));
-
-  const TotalRecord = gambiarra?.length;
 
   return (
     <Layout pageTitle="Solicitante">
@@ -68,7 +65,7 @@ export default function Solicitantes() {
           <DataTable
             data={formattedData}
             page={page}
-            total={TotalRecord}
+            total={solicitanteData?.TotalRecords}
             perPage={perPage}
             onNextPageClick={onNextPageClick}
             onBackPageClick={onBackPageClick}

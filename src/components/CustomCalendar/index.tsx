@@ -1,16 +1,19 @@
 "use client";
-import { Calendar, momentLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import moment from "moment";
 import "moment/locale/pt-br";
-import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./index.css";
-import AppointmentEvent from "../AppointmentEvent";
-import { CustomCalendarProps } from "./types";
-import { CustomCalendarEvent } from "@/@types/type";
 
-moment.locale("pt-br");
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
+
+import moment from "moment";
+
+import { CustomCalendarEvent } from "@/@types";
+
+import AppointmentEvent from "../AppointmentEvent";
+
+import { CustomCalendarProps } from "./types";
 
 const messages = {
   today: "Hoje",
@@ -37,7 +40,7 @@ function handleData(data: Date) {
   );
 }
 
-export default function CustomCalendar({
+export function CustomCalendar({
   event,
   resizable,
   onEventResize,
@@ -51,7 +54,7 @@ export default function CustomCalendar({
   const components = {
     event: ({ event }: any) => {
       if (event?.data?.appointment)
-        return <AppointmentEvent appointment={event?.data?.appointment} />;
+        return <AppointmentEvent appointment={event.data.appointment} />;
       // if (data?.blockout) return <BlockoutEvent blockout={data?.blockout} />;
       return null;
     },
@@ -77,8 +80,8 @@ export default function CustomCalendar({
         formats={{
           dayHeaderFormat: (date) => handleData(date),
         }}
-        min={new Date(Year, 0, 1, 6, 0)}
-        max={new Date(Year, 11, 31, 22, 50)}
+        min={new Date(Year - 1, 0, 1, 7, 30)}
+        max={new Date(Year, 11, 31, 23, 20)}
         messages={messages}
         onRangeChange={(range) => console.log(range)}
         resizable={resizable}

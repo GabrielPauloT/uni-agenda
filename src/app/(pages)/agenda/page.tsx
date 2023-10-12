@@ -1,13 +1,15 @@
 "use client";
-import CustomCalendar from "@/components/CustomCalendar";
 import { useCallback, useState } from "react";
-import { EVENTS } from "@/components/CustomCalendar/events";
-import moment from "moment";
-import { CustomCalendarEvent } from "@/@types/type";
 import { SlotInfo } from "react-big-calendar";
-import { resourceMap } from "./const";
+
+import moment from "moment";
+
+import { CustomCalendarEvent } from "@/@types/components/Calendario";
+import { CustomCalendar, Layout } from "@/components";
 import { Modal2 } from "@/components/Modal/excluir";
-import { Layout } from "@/components/Layout/layout";
+import { EVENTS } from "@/contants/events";
+
+import { resourceMap } from "./const";
 
 export default function Agenda() {
   const [isModalOpen, setIsModalOpen] = useState(false);

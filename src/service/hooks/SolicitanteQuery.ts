@@ -1,10 +1,10 @@
 import { ReactQueryKeysEnum } from "@/@types/enums/reactQuery";
-import { useApiQuery } from "../hooks/Query";
+import { useQuery } from "@tanstack/react-query";
+
 import { SolicitanteRequest } from "../requests";
-import { Solicitante } from "../types";
 
 export function useFindAllSolicitante(page: number, perPage: number) {
-  return useApiQuery<Solicitante[]>({
+  return useQuery({
     queryKey: [ReactQueryKeysEnum.SOLICITANTE_FINDALL, page, perPage],
     queryFn: async () => {
       const { data } = await SolicitanteRequest.findAllSolicitante(

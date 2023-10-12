@@ -1,17 +1,15 @@
 "use client";
-import { DataTable } from "@/components/DataTable";
-import { Layout } from "@/components/Layout/layout";
-import { SalaQuery } from "@/service/query";
-import { Sala } from "@/service/types";
 import { useState } from "react";
+
+import { DataTable } from "@/components/DataTable";
+import { Layout } from "@/components/Layout";
+import { SalaQuery } from "@/service/hooks";
 
 export default function Sala() {
   const [page, setPage] = useState(1);
   const perPage = 6;
 
   const { data: salaData } = SalaQuery.useFindAllSala(page, perPage);
-
-  const { data: gambiarra } = SalaQuery.useFindAllSala(1, 100);
 
   const onNextPageClick = () => {
     setPage(page + 1);
@@ -39,13 +37,11 @@ export default function Sala() {
     setIsAddingSala(true);
   };
 
-  const formattedData = salaData?.map((sala) => ({
+  const formattedData = salaData?.Result.map((sala) => ({
     ...sala,
     createdat: new Date(sala.createdat).toLocaleDateString("pt-BR"),
     updatedat: new Date(sala.updatedat).toLocaleDateString("pt-BR"),
   }));
-
-  const TotalRecord = gambiarra?.length;
 
   return (
     <Layout pageTitle="Sala">
@@ -65,7 +61,7 @@ export default function Sala() {
           <DataTable
             data={formattedData}
             page={page}
-            total={TotalRecord}
+            total={salaData?.TotalRecords}
             perPage={perPage}
             onNextPageClick={onNextPageClick}
             onBackPageClick={onBackPageClick}

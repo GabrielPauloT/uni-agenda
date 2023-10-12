@@ -1,8 +1,11 @@
 "use client";
 import { useState } from "react";
+
 import Head from "next/head";
-import MenuBarMobile from "../MenuBarMobile/MenuBarMobile";
+
+import MenuBarMobile from "../MenuBarMobile";
 import { Sidebar } from "../Sidebar";
+
 import { LayoutProps } from "./types";
 
 export function Layout({ pageTitle, children }: LayoutProps) {
