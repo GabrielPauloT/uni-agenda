@@ -7,3 +7,7 @@ export function findAllUsuario(page: number, perPage: number) {
     `/usuarios/${page}/page/${perPage}/per-page`,
   );
 }
+
+export function createUsuario(usuarioData: Usuario) {
+  return api.post("/usuarios", usuarioData);
+}

@@ -6,7 +6,7 @@ import moment from "moment";
 import { CustomCalendarEvent } from "@/@types/type";
 import { SlotInfo } from "react-big-calendar";
 import { resourceMap } from "./const";
-import { Modal } from "@/components/Modal";
+import { Modal2 } from "@/components/Modal/excluir";
 import { Layout } from "@/components/Layout/layout";
 
 export default function Agenda() {
@@ -99,7 +99,7 @@ export default function Agenda() {
           onSelectSlot={handleSelectSlot}
           onSelectEvent={handleSelectEvent}
         />
-        <Modal
+        <Modal2
           onClose={() => setIsModalOpen(!isModalOpen)}
           isOpen={isModalOpen}
           dados={data}

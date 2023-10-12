@@ -58,7 +58,7 @@ export const EVENTS: CustomCalendarEvent[] = [
     end: new Date(2023, month, 2, 13, 50, 0),
     data: {
       appointment: {
-        id: 4,
+        id: 5,
         professor: "Eder",
       },
     },

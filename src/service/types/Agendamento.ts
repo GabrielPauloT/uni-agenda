@@ -1,5 +1,5 @@
 export type Agendamento = {
-  id: number;
+  id?: number;
   idsala: number;
   idsolicitante: number;
   idusuario: number;
@@ -9,6 +9,6 @@ export type Agendamento = {
   datainicio: Date;
   datafinal: Date;
   tema: string;
-  createdat: string;
-  updatedat: string;
+  createdat?: string;
+  updatedat?: string;
 };

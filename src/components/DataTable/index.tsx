@@ -66,7 +66,7 @@ export function DataTable({
                   {row[column]}
                 </td>
               ))}
-              <td className="border-b border-gray-300 px-4 py-2">
+              <td className="border-b border-gray-300 px-4 py-2 text-center">
                 <button
                   onClick={() => onEditClick(row)}
                   className="mr-2 text-blue-500 hover:text-blue-700"
