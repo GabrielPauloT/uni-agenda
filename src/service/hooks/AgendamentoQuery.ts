@@ -3,14 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import { AgendamentoRequest } from "../requests";
 
-export function useFindAllAgendamento(page: number, perPage: number) {
+export function useAgendamento() {
   return useQuery({
-    queryKey: [ReactQueryKeysEnum.AGENDAMENTO_FINDALL, page, perPage],
+    queryKey: [ReactQueryKeysEnum.AGENDAMENTO_FINDALL],
     queryFn: async () => {
-      const { data } = await AgendamentoRequest.findAllAgendamento(
-        page,
-        perPage,
-      );
+      const { data } = await AgendamentoRequest.findAllAgendamento();
       return data;
     },
   });

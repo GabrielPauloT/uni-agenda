@@ -10,3 +10,14 @@ export type CustomCalendarEvent = {
   data?: { appointment: Appointment };
   isDraggable?: boolean;
 };
+
+export type AppointmentForm = {
+  id: string;
+  data: string;
+};
+
+export type AgendaEvent = {
+  resourceId?: number | string | undefined;
+  tema: string;
+  appointment: AppointmentForm[];
+};

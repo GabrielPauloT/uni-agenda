@@ -6,4 +6,5 @@ export type InputProps = {
   type: string;
   title: string;
   name: string;
+  required: boolean;
 };

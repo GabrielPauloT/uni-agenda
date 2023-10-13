@@ -2,15 +2,18 @@ import { ReactQueryKeysEnum } from "@/@types/enums/reactQuery";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { UsuarioRquest } from "../requests";
-import { createUsuario } from "../requests/UsuarioRequest";
+import {
+  createUsuario,
+  deleteUser,
+  updateUser,
+} from "../requests/UsuarioRequest";
 import { Usuario } from "../types";
 
-export function useFindAllUsuario(page: number, perPage: number) {
+export function useUsuario(page: number, perPage: number) {
   return useQuery({
     queryKey: [ReactQueryKeysEnum.USUARIO_FINDALL, page, perPage],
     queryFn: async () => {
       const { data } = await UsuarioRquest.findAllUsuario(page, perPage);
-      console.log("findall", data);
       return data;
     },
   });
@@ -19,6 +22,26 @@ export function useFindAllUsuario(page: number, perPage: number) {
 export function useCreateUsuario() {
   const mutation = useMutation({
     mutationFn: (usuarioData: Usuario) => createUsuario(usuarioData),
+  });
+  return mutation;
+}
+
+export function useDeleteUsuario() {
+  const mutation = useMutation({
+    mutationFn: (userId: number) => deleteUser(userId),
+  });
+  return mutation;
+}
+
+export function useUpdateUsuario() {
+  const mutation = useMutation({
+    mutationFn: ({
+      userId,
+      usuarioData,
+    }: {
+      userId: number;
+      usuarioData: Partial<Usuario>;
+    }) => updateUser(userId, usuarioData),
   });
   return mutation;
 }

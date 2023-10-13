@@ -3,10 +3,8 @@ import { ApiResult } from "@/@types/API/ApiResult";
 import { api } from "../api";
 import { Agendamento } from "../types";
 
-export function findAllAgendamento(page: number, perPage: number) {
-  return api.get<ApiResult<Agendamento[]>>(
-    `/agendamentos/${page}/page/${perPage}/per-page`,
-  );
+export function findAllAgendamento() {
+  return api.get<ApiResult<Agendamento[]>>(`/agendamentos/`);
 }
 
 export function createAgendamento(agendamento: Agendamento) {

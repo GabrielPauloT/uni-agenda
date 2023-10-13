@@ -1,4 +1,4 @@
-import { CustomCalendarEvent } from "@/@types/components/Calendario";
+import { CustomCalendarEvent } from "@/@types";
 
 const day = new Date().getUTCDate();
 const month = new Date().getUTCMonth();
@@ -17,7 +17,7 @@ export const EVENTS: CustomCalendarEvent[] = [
     isDraggable: true,
   },
   {
-    resourceId: 2,
+    resourceId: 5,
     start: new Date(2023, month, day, 6, 50, 0),
     end: new Date(2023, month, day, 7, 40, 0),
     data: {

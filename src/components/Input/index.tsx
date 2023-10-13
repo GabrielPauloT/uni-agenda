@@ -10,6 +10,7 @@ export function Input({
   type,
   title,
   name,
+  required,
 }: InputProps) {
   const {
     register,
@@ -26,7 +27,7 @@ export function Input({
       </label>
       <input
         {...register(name, {
-          required: true,
+          required: required,
           value: value,
           onChange: onChange,
         })}
@@ -36,6 +37,9 @@ export function Input({
         placeholder={placeholder}
         name={name}
       />
+      {errors[name] && (
+        <span className="text-red-500">Este campo é obrigatório</span>
+      )}
     </div>
   );
 }

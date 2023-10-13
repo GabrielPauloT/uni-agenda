@@ -8,12 +8,17 @@ import { CustomCalendarEvent } from "@/@types/components/Calendario";
 import { CustomCalendar, Layout } from "@/components";
 import { Modal2 } from "@/components/Modal/excluir";
 import { EVENTS } from "@/contants/events";
+import { useAgendamento } from "@/service";
 
 import { resourceMap } from "./const";
 
 export default function Agenda() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState<CustomCalendarEvent>();
+
+  const { data: dataAgendamento } = useAgendamento();
+
+  console.log(dataAgendamento);
 
   const [events, setEvents] = useState<CustomCalendarEvent[]>(EVENTS);
   const onChangeEventTime = useCallback(

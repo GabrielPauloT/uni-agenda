@@ -1,24 +1,33 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
 import { DataTable } from "@/components/DataTable";
-import { Input } from "@/components/Input";
 import { Layout } from "@/components/Layout";
 import { Modal } from "@/components/Modal";
+import { Toast } from "@/components/Toast";
+import { ToastProps } from "@/components/Toast/type";
 import { UsuarioQuery } from "@/service/hooks";
-import { useCreateUsuario } from "@/service/hooks/UsuarioQuery";
+import {
+  useCreateUsuario,
+  useDeleteUsuario,
+  useUpdateUsuario,
+} from "@/service/hooks/UsuarioQuery";
 
+import { ModalInput } from "./modalInput";
+import { ModalView } from "./modalView";
 import { dataUsuario, formUsuario } from "./type";
 
 const PER_PAGE = 6;
 const DEFAULT_USER_DATA = {
+  Id: 0,
   Nome: "",
   Email: "",
   Senha: "",
 };
 
 export default function Usuario() {
+  const [toast, setToast] = useState<ToastProps>();
   const [page, setPage] = useState(1);
   const [title, setTitle] = useState("");
   const [openModal, setOpenModal] = useState(false);
@@ -30,58 +39,107 @@ export default function Usuario() {
     setUserData(DEFAULT_USER_DATA);
   };
 
+  const showSuccessToast = (message: string) => {
+    setToast({ type: "success", message });
+  };
+
+  const showErrorToast = (message: string) => {
+    setToast({ type: "error", message });
+  };
+
   const closeModal = () => {
     formMethods.reset();
     resetData();
     setOpenModalView(false);
     setOpenModal(false);
   };
-  const { data: usuarioData } = UsuarioQuery.useFindAllUsuario(page, PER_PAGE);
+  const { data: usuarioData } = UsuarioQuery.useUsuario(page, PER_PAGE);
 
   const createUsuarioMutation = useCreateUsuario();
 
-  const onEditClick = (row: dataUsuario) => {
+  const deleteUsuarioMutation = useDeleteUsuario();
+
+  const updateUsuarioMutation = useUpdateUsuario();
+
+  const onEditClick = useCallback((row: dataUsuario) => {
     setTitle("Editar Usuario");
     setUserData({
-      Nome: row.nome,
-      Email: row.email,
+      Id: row.Id,
+      Nome: row.Nome,
+      Email: row.Email,
       Senha: "",
     });
     setOpenModal(true);
-  };
+  }, []);
 
-  const onDeleteClick = (row: dataUsuario) => {
-    console.log(row);
-  };
+  const onDeleteClick = useCallback(
+    (row: dataUsuario) => {
+      deleteUsuarioMutation
+        .mutateAsync(row.Id)
+        .then(() => {
+          showSuccessToast("Usuario deletado com sucesso");
+        })
+        .catch(() => {
+          showErrorToast("Erro ao deletar usuario");
+        });
+    },
+    [deleteUsuarioMutation],
+  );
 
-  const onViewClick = (row: dataUsuario) => {
+  const onViewClick = useCallback((row: dataUsuario) => {
     setTitle("Visualizar Usuario");
     setUserData({
-      Nome: row.nome,
-      Email: row.email,
+      Id: row.Id,
+      Nome: row.Nome,
+      Email: row.Email,
       Senha: "",
     });
     setOpenModalView(true);
     setOpenModal(true);
-  };
+  }, []);
 
-  const onAddUserClick = () => {
+  const onAddUserClick = useCallback(() => {
     setTitle("Cadastrar Usuario");
     setOpenModal(true);
-  };
+  }, []);
 
-  const formattedData = usuarioData?.Result.map((usuario) => ({
-    ...usuario,
-    createdat: usuario?.createdat
-      ? new Date(usuario.createdat).toLocaleDateString("pt-BR")
-      : new Date().toLocaleDateString("pt-BR"),
-    updatedat: usuario?.updatedat
-      ? new Date(usuario.updatedat).toLocaleDateString("pt-BR")
-      : new Date().toLocaleDateString("pt-BR"),
-  }));
+  const formattedData = useMemo(
+    () =>
+      usuarioData?.Result.map((usuario) => ({
+        ...usuario,
+        CreatedAt: usuario?.CreatedAt
+          ? new Date(usuario.CreatedAt).toLocaleDateString("pt-BR")
+          : "",
+        UpdatedAt: usuario?.UpdatedAt
+          ? new Date(usuario.UpdatedAt).toLocaleDateString("pt-BR")
+          : "",
+      })),
+    [usuarioData],
+  );
 
   const onSubmit: SubmitHandler<formUsuario> = (data) => {
-    createUsuarioMutation.mutateAsync(data);
+    if (title === "Editar Usuario") {
+      updateUsuarioMutation
+        .mutateAsync({
+          userId: userData.Id,
+          usuarioData: data,
+        })
+        .then(() => {
+          showSuccessToast("Usuario atualizado com sucesso");
+        })
+        .catch(() => {
+          showErrorToast("Erro ao atualizar usuario");
+        });
+    } else if (title === "Cadastrar Usuario") {
+      createUsuarioMutation
+        .mutateAsync(data)
+        .then(() => {
+          showSuccessToast("Usuario cadastrado com sucesso");
+        })
+        .catch(() => {
+          showErrorToast("Erro ao cadastrar usuario");
+        });
+    }
     closeModal();
   };
 
@@ -101,99 +159,40 @@ export default function Usuario() {
             </button>
             <Modal isOpen={openModal} title={title}>
               {openModalView ? (
-                <div className="mx-auto my-8 flex max-w-md flex-col items-center space-y-4 rounded-lg bg-white p-8 shadow-xl">
-                  <div className="flex w-full flex-col space-y-2">
-                    <p className="text-lg font-medium text-gray-900">
-                      Nome:{" "}
-                      <span className="font-light text-gray-500">
-                        {userData.Nome}
-                      </span>
-                    </p>
-                    <p className="text-lg font-medium text-gray-900">
-                      Email:{" "}
-                      <span className="font-light text-gray-500">
-                        {userData.Email}
-                      </span>
-                    </p>
-                    <p className="text-lg font-medium text-gray-900">
-                      Senha:{" "}
-                      <span className="font-light text-gray-500">
-                        *************
-                      </span>
-                    </p>
-                  </div>
-                  <button
-                    type="reset"
-                    className="w-full rounded-md bg-red-500 px-4 py-2 text-white transition duration-300 ease-in-out hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-                    onClick={closeModal}
-                  >
-                    Cancelar
-                  </button>
-                </div>
+                <ModalView
+                  email={userData.Email}
+                  nome={userData.Nome}
+                  senha={userData.Senha}
+                  onClick={closeModal}
+                />
               ) : (
                 <FormProvider {...formMethods}>
-                  <form
+                  <ModalInput
+                    isEdit={!(title === "Editar Usuario")}
+                    nome={userData.Nome}
+                    email={userData.Email}
+                    senha={userData.Senha}
+                    onClick={closeModal}
                     onSubmit={formMethods.handleSubmit(onSubmit)}
-                    className="flex flex-col gap-6"
-                  >
-                    <Input
-                      type="text"
-                      title="Nome"
-                      placeholder="Nome"
-                      id="Nome"
-                      name="Nome"
-                      value={userData.Nome || ""}
-                      onChange={(e) =>
-                        setUserData({
-                          ...userData,
-                          Nome: e.target.value,
-                        })
-                      }
-                    />
-                    <Input
-                      type="email"
-                      title="Email"
-                      placeholder="Email"
-                      id="Email"
-                      name="Email"
-                      value={userData.Email || ""}
-                      onChange={(e) =>
-                        setUserData({
-                          ...userData,
-                          Email: e.target.value,
-                        })
-                      }
-                    />
-                    <Input
-                      type="Password"
-                      title="Senha"
-                      placeholder="Senha"
-                      id="Senha"
-                      name="Senha"
-                      value={userData.Senha || ""}
-                      onChange={(e) =>
-                        setUserData({
-                          ...userData,
-                          Senha: e.target.value,
-                        })
-                      }
-                    />
-                    <div className="flex justify-center gap-5">
-                      <button
-                        type="submit"
-                        className="mt-4 w-44 rounded bg-blue-500 px-4 py-2 text-white hover:bg-primary-100"
-                      >
-                        Enviar
-                      </button>
-                      <button
-                        type="reset"
-                        className="mt-4 w-44 rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-                        onClick={closeModal}
-                      >
-                        Cancelar
-                      </button>
-                    </div>
-                  </form>
+                    onChageNome={(e) =>
+                      setUserData({
+                        ...userData,
+                        Nome: e.target.value,
+                      })
+                    }
+                    onChageEmail={(e) =>
+                      setUserData({
+                        ...userData,
+                        Email: e.target.value,
+                      })
+                    }
+                    onChageSenha={(e) =>
+                      setUserData({
+                        ...userData,
+                        Senha: e.target.value,
+                      })
+                    }
+                  />
                 </FormProvider>
               )}
             </Modal>
@@ -211,6 +210,7 @@ export default function Usuario() {
           />
         </div>
       </div>
+      {toast && <Toast type={toast.type} message={toast.message} />}
     </Layout>
   );
 }
