@@ -3,11 +3,9 @@ import { Input } from "@/components";
 import { ModalInputProps } from "./type";
 
 export function ModalInput({
-  email,
-  nome,
+  data,
   onClick,
   onSubmit,
-  senha,
   onChageNome,
   onChageEmail,
   onChageSenha,
@@ -21,7 +19,7 @@ export function ModalInput({
         placeholder="Nome"
         id="Nome"
         name="Nome"
-        value={nome || ""}
+        value={data.Nome || ""}
         onChange={onChageNome}
         required={isEdit}
       />
@@ -31,7 +29,7 @@ export function ModalInput({
         placeholder="Email"
         id="Email"
         name="Email"
-        value={email || ""}
+        value={data.Email || ""}
         onChange={onChageEmail}
         required={isEdit}
       />
@@ -41,7 +39,7 @@ export function ModalInput({
         placeholder="Senha"
         id="Senha"
         name="Senha"
-        value={senha || ""}
+        value={data.Senha || ""}
         onChange={onChageSenha}
         required={isEdit}
       />

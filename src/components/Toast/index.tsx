@@ -5,13 +5,14 @@ import { ToastProps } from "./type";
 
 import { Icons } from "..";
 
-export const Toast = ({ message, type }: ToastProps) => {
+export const Toast = ({ message, type, isClose }: ToastProps) => {
   const [isVisible, setIsVisible] = useState(true);
 
   // Desaparecer depois de 5 segundos
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
+      isClose(undefined);
     }, 5000);
     return () => clearTimeout(timer);
   }, []);
@@ -19,8 +20,6 @@ export const Toast = ({ message, type }: ToastProps) => {
   if (!isVisible) {
     return null;
   }
-
-  // Estilos aplicados usando Tailwind CSS
   return (
     <div
       className={`fixed bottom-4 right-4 z-50 flex h-12 min-w-[250px] max-w-[400px] items-center justify-center gap-2 rounded-lg p-2 text-white shadow-md ${

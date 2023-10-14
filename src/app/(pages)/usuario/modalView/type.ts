@@ -1,6 +1,6 @@
+import { FormUsuarioType } from "../type";
+
 export type ModalViewType = {
-  nome: string;
-  email: string;
-  senha: string;
+  data: FormUsuarioType;
   onClick: () => void;
 };

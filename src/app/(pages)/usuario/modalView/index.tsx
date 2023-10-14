@@ -1,17 +1,17 @@
 import { ModalViewType } from "./type";
 
-export function ModalView({ email, nome, senha, onClick }: ModalViewType) {
+export function ModalView({ data, onClick }: ModalViewType) {
   return (
     <div className="mx-auto my-8 flex max-w-md flex-col items-center space-y-4 rounded-lg bg-white p-8 shadow-xl">
       <div className="flex w-full flex-col space-y-2">
         <p className="text-lg font-medium text-gray-900">
-          Nome: <span className="font-light text-gray-500">{nome}</span>
+          Nome: <span className="font-light text-gray-500">{data.Nome}</span>
         </p>
         <p className="text-lg font-medium text-gray-900">
-          Email: <span className="font-light text-gray-500">{email}</span>
+          Email: <span className="font-light text-gray-500">{data.Email}</span>
         </p>
         <p className="text-lg font-medium text-gray-900">
-          Senha: <span className="font-light text-gray-500">{senha}</span>
+          Senha: <span className="font-light text-gray-500">************</span>
         </p>
       </div>
       <button

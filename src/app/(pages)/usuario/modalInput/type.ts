@@ -1,9 +1,9 @@
 import { ChangeEvent, FormEventHandler } from "react";
 
+import { FormUsuarioType } from "../type";
+
 export type ModalInputProps = {
-  nome: string;
-  email: string;
-  senha: string;
+  data: FormUsuarioType;
   onClick: () => void;
   onSubmit: FormEventHandler<HTMLFormElement> | undefined;
   onChageNome: ((e: ChangeEvent<HTMLInputElement>) => void) | undefined;

@@ -2,21 +2,22 @@
 import { useCallback, useMemo, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
+import { ReactQueryKeysEnum } from "@/@types";
 import { DataTable } from "@/components/DataTable";
 import { Layout } from "@/components/Layout";
 import { Modal } from "@/components/Modal";
 import { Toast } from "@/components/Toast";
-import { ToastProps } from "@/components/Toast/type";
 import { UsuarioQuery } from "@/service/hooks";
 import {
   useCreateUsuario,
   useDeleteUsuario,
   useUpdateUsuario,
 } from "@/service/hooks/UsuarioQuery";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { ModalInput } from "./modalInput";
 import { ModalView } from "./modalView";
-import { dataUsuario, formUsuario } from "./type";
+import { DataUsuarioType, FormUsuarioType, ToastStateType } from "./type";
 
 const PER_PAGE = 6;
 const DEFAULT_USER_DATA = {
@@ -27,12 +28,13 @@ const DEFAULT_USER_DATA = {
 };
 
 export default function Usuario() {
-  const [toast, setToast] = useState<ToastProps>();
+  const queryCliente = useQueryClient();
+  const [toast, setToast] = useState<ToastStateType>();
   const [page, setPage] = useState(1);
   const [title, setTitle] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [openModalView, setOpenModalView] = useState(false);
-  const formMethods = useForm<formUsuario>();
+  const formMethods = useForm<FormUsuarioType>();
   const [userData, setUserData] = useState(DEFAULT_USER_DATA);
 
   const resetData = () => {
@@ -61,7 +63,7 @@ export default function Usuario() {
 
   const updateUsuarioMutation = useUpdateUsuario();
 
-  const onEditClick = useCallback((row: dataUsuario) => {
+  const onEditClick = useCallback((row: DataUsuarioType) => {
     setTitle("Editar Usuario");
     setUserData({
       Id: row.Id,
@@ -73,20 +75,21 @@ export default function Usuario() {
   }, []);
 
   const onDeleteClick = useCallback(
-    (row: dataUsuario) => {
+    (row: DataUsuarioType) => {
       deleteUsuarioMutation
         .mutateAsync(row.Id)
         .then(() => {
           showSuccessToast("Usuario deletado com sucesso");
+          queryCliente.invalidateQueries([ReactQueryKeysEnum.USUARIO_FINDALL]);
         })
         .catch(() => {
           showErrorToast("Erro ao deletar usuario");
         });
     },
-    [deleteUsuarioMutation],
+    [deleteUsuarioMutation, queryCliente],
   );
 
-  const onViewClick = useCallback((row: dataUsuario) => {
+  const onViewClick = useCallback((row: DataUsuarioType) => {
     setTitle("Visualizar Usuario");
     setUserData({
       Id: row.Id,
@@ -117,7 +120,7 @@ export default function Usuario() {
     [usuarioData],
   );
 
-  const onSubmit: SubmitHandler<formUsuario> = (data) => {
+  const onSubmit: SubmitHandler<FormUsuarioType> = (data) => {
     if (title === "Editar Usuario") {
       updateUsuarioMutation
         .mutateAsync({
@@ -126,6 +129,7 @@ export default function Usuario() {
         })
         .then(() => {
           showSuccessToast("Usuario atualizado com sucesso");
+          queryCliente.invalidateQueries([ReactQueryKeysEnum.USUARIO_FINDALL]);
         })
         .catch(() => {
           showErrorToast("Erro ao atualizar usuario");
@@ -135,6 +139,7 @@ export default function Usuario() {
         .mutateAsync(data)
         .then(() => {
           showSuccessToast("Usuario cadastrado com sucesso");
+          queryCliente.invalidateQueries([ReactQueryKeysEnum.USUARIO_FINDALL]);
         })
         .catch(() => {
           showErrorToast("Erro ao cadastrar usuario");
@@ -159,19 +164,12 @@ export default function Usuario() {
             </button>
             <Modal isOpen={openModal} title={title}>
               {openModalView ? (
-                <ModalView
-                  email={userData.Email}
-                  nome={userData.Nome}
-                  senha={userData.Senha}
-                  onClick={closeModal}
-                />
+                <ModalView data={userData} onClick={closeModal} />
               ) : (
                 <FormProvider {...formMethods}>
                   <ModalInput
                     isEdit={!(title === "Editar Usuario")}
-                    nome={userData.Nome}
-                    email={userData.Email}
-                    senha={userData.Senha}
+                    data={userData}
                     onClick={closeModal}
                     onSubmit={formMethods.handleSubmit(onSubmit)}
                     onChageNome={(e) =>
@@ -210,7 +208,9 @@ export default function Usuario() {
           />
         </div>
       </div>
-      {toast && <Toast type={toast.type} message={toast.message} />}
+      {toast && (
+        <Toast type={toast.type} message={toast.message} isClose={setToast} />
+      )}
     </Layout>
   );
 }
