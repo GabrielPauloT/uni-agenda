@@ -1,23 +1,8 @@
-export type Appointment = {
-  id?: number;
-  professor: string;
-};
-
-export type CustomCalendarEvent = {
-  resourceId?: number | string | undefined;
-  start?: Date;
-  end?: Date;
-  data?: { appointment: Appointment };
-  isDraggable?: boolean;
-};
-
-export type AppointmentForm = {
-  id: string;
-  data: string;
-};
-
-export type AgendaEvent = {
-  resourceId?: number | string | undefined;
+export type AgendaEventType = {
+  resourceId: number;
+  start: Date;
+  end: Date;
+  idAgendamento: number;
   tema: string;
-  appointment: AppointmentForm[];
+  Solicitante: string;
 };

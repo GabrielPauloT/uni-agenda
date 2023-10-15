@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-import { CustomCalendarEvent } from "@/@types/components/Calendario";
+import { CustomCalendarEventType } from "@/@types/components/Calendario";
 
 import { ModalProps } from "./types";
 
 export function Modal2({ isOpen, onClose, onSave, dados }: ModalProps) {
-  const [eventData, setEventData] = useState<CustomCalendarEvent>(
-    dados || ({} as CustomCalendarEvent),
+  const [eventData, setEventData] = useState<CustomCalendarEventType>(
+    dados || ({} as CustomCalendarEventType),
   );
 
   if (!isOpen) return null;

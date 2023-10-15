@@ -3,6 +3,6 @@ export type Usuario = {
   Nome: string;
   Email: string;
   Senha?: string;
-  CreatedAt?: Date;
-  UpdatedAt?: Date;
+  CriadoEm?: Date;
+  AtualizadoEm?: Date;
 };

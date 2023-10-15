@@ -1,4 +1,4 @@
-export enum tipoSala {
+export enum TipoSalaEnum {
   Informática = 1,
   Invertida = 2,
 }

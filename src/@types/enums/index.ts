@@ -1,2 +1,3 @@
 export * from "./reactQuery";
-export * from "./enums";
+export * from "./tipoSala";
+export * from "./diaSemana";

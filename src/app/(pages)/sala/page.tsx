@@ -9,7 +9,7 @@ export default function Sala() {
   const [page, setPage] = useState(1);
   const perPage = 6;
 
-  const { data: salaData } = SalaQuery.useFindAllSala(page, perPage);
+  const { data: salaData } = SalaQuery.useSala(page, perPage);
 
   const onNextPageClick = () => {
     setPage(page + 1);

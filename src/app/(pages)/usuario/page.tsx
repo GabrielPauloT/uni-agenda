@@ -110,11 +110,11 @@ export default function Usuario() {
     () =>
       usuarioData?.Result.map((usuario) => ({
         ...usuario,
-        CreatedAt: usuario?.CreatedAt
-          ? new Date(usuario.CreatedAt).toLocaleDateString("pt-BR")
+        CriadoEm: usuario?.CriadoEm
+          ? new Date(usuario.CriadoEm).toLocaleDateString("pt-BR")
           : "",
-        UpdatedAt: usuario?.UpdatedAt
-          ? new Date(usuario.UpdatedAt).toLocaleDateString("pt-BR")
+        AtualizadoEm: usuario?.AtualizadoEm
+          ? new Date(usuario.AtualizadoEm).toLocaleDateString("pt-BR")
           : "",
       })),
     [usuarioData],

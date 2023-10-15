@@ -1,16 +1,22 @@
-import { SlotInfo, View } from "react-big-calendar";
+import { Event, SlotInfo, View } from "react-big-calendar";
 import { withDragAndDropProps } from "react-big-calendar/lib/addons/dragAndDrop";
 
-import { CustomCalendarEvent } from "@/@types/components/Calendario";
+import { AgendaEventType } from "@/@types/components/Calendario";
+
+export type SalaMapType = {
+  id: number;
+  title: string;
+} & Event;
 
 type CalendarEvent = {
-  onSelectSlot: (slotInfo: SlotInfo) => void | undefined;
-  onSelectEvent: (event: CustomCalendarEvent) => void | undefined;
-  resourceMap: { id: number; title: string }[];
+  onSelectSlot?: (slotInfo: SlotInfo) => void | undefined;
+  // onSelectEvent: (event: AgendaEventType) => void | undefined;
+  resourceMap: SalaMapType[] | undefined;
   views: View[];
   defaultView: View;
 };
 
-type DnDType = CustomCalendarEvent &
-  withDragAndDropProps & { event: CustomCalendarEvent[] } & CalendarEvent;
+type DnDType = withDragAndDropProps & {
+  event: AgendaEventType[] | undefined;
+} & CalendarEvent;
 export type CustomCalendarProps = Omit<DnDType, "localizer">;

@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 
-import { CustomCalendarEvent } from "@/@types/components/Calendario";
+import { AgendamentoType } from "@/service";
 
 export type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSave?: (eventData: CustomCalendarEvent) => void;
-  dados?: CustomCalendarEvent;
+  onSave?: (eventData: AgendamentoType) => void;
+  dados?: AgendamentoType;
 };
 
 export type CommonModalProps = {

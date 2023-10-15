@@ -4,16 +4,16 @@ import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./index.css";
 
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import { Calendar, EventProps, momentLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 
 import moment from "moment";
 
-import { CustomCalendarEvent } from "@/@types";
-
-import AppointmentEvent from "../AppointmentEvent";
+import { AgendaEventType } from "@/@types";
 
 import { CustomCalendarProps } from "./types";
+
+import { AppointmentEvent } from "..";
 
 const messages = {
   today: "Hoje",
@@ -46,17 +46,14 @@ export function CustomCalendar({
   onEventResize,
   onEventDrop,
   onSelectSlot,
-  onSelectEvent,
+  // onSelectEvent,
   resourceMap,
   views,
   defaultView,
 }: CustomCalendarProps) {
   const components = {
-    event: ({ event }: any) => {
-      if (event?.data?.appointment)
-        return <AppointmentEvent appointment={event.data.appointment} />;
-      // if (data?.blockout) return <BlockoutEvent blockout={data?.blockout} />;
-      return null;
+    event: (event: EventProps<AgendaEventType>) => {
+      return <AppointmentEvent data={event} />;
     },
   };
 
@@ -65,9 +62,9 @@ export function CustomCalendar({
   return (
     <div className="mt-0 rounded-lg bg-white p-4 shadow-md max-md:ml-2 max-md:mt-16">
       <DnDCalendar
-        draggableAccessor={(event: CustomCalendarEvent) =>
-          event.isDraggable === true
-        }
+        // draggableAccessor={(event: AgendaEventType) =>
+        //   event.isDraggable === true
+        // }
         selectable
         components={components}
         localizer={localizer}
@@ -89,7 +86,7 @@ export function CustomCalendar({
         onEventDrop={onEventDrop}
         events={event}
         onSelectSlot={onSelectSlot}
-        onSelectEvent={onSelectEvent}
+        // onSelectEvent={onSelectEvent}
       />
     </div>
   );

@@ -12,13 +12,3 @@ export function useAgendamento() {
     },
   });
 }
-
-export function useFindAgendamentoById(id: number) {
-  return useQuery({
-    queryKey: [ReactQueryKeysEnum.AGENDAMENTO_FINDBYID, id],
-    queryFn: async () => {
-      const { data } = await AgendamentoRequest.findAgendamentoById(id);
-      return data;
-    },
-  });
-}

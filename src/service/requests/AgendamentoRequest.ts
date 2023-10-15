@@ -1,27 +1,8 @@
 import { ApiResult } from "@/@types/API/ApiResult";
 
 import { api } from "../api";
-import { Agendamento } from "../types";
+import { AgendamentoType } from "../types";
 
 export function findAllAgendamento() {
-  return api.get<ApiResult<Agendamento[]>>(`/agendamentos/`);
-}
-
-export function createAgendamento(agendamento: Agendamento) {
-  return api.post<ApiResult<Agendamento>>("/agendamentos", agendamento);
-}
-
-export function updateAgendamento(agendamento: Agendamento) {
-  return api.put<ApiResult<Agendamento>>(
-    `/agendamentos/${agendamento.id}`,
-    agendamento,
-  );
-}
-
-export function deleteAgendamento(id: number) {
-  return api.delete<ApiResult<Agendamento>>(`/agendamentos/${id}`);
-}
-
-export function findAgendamentoById(id: number) {
-  return api.get<ApiResult<Agendamento>>(`/agendamentos/${id}`);
+  return api.get<ApiResult<AgendamentoType[]>>(`/agendamentos/`);
 }

@@ -1,82 +1,100 @@
 "use client";
-import { useCallback, useState } from "react";
-import { SlotInfo } from "react-big-calendar";
 
-import moment from "moment";
-
-import { CustomCalendarEvent } from "@/@types/components/Calendario";
 import { CustomCalendar, Layout } from "@/components";
-import { Modal2 } from "@/components/Modal/excluir";
-import { EVENTS } from "@/contants/events";
 import { useAgendamento } from "@/service";
-
-import { resourceMap } from "./const";
+import { useSala } from "@/service/hooks/SalaQuery";
 
 export default function Agenda() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [data, setData] = useState<CustomCalendarEvent>();
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: dataAgendamento } = useAgendamento();
+  const { data: dataSalas } = useSala(1, 100);
 
-  console.log(dataAgendamento);
+  const { data: dataAgenda } = useAgendamento();
 
-  const [events, setEvents] = useState<CustomCalendarEvent[]>(EVENTS);
-  const onChangeEventTime = useCallback(
-    (
-      start: Date,
-      end: Date,
-      appointmentId: number | undefined,
-      resourceId: number,
-    ) => {
-      setEvents(() => {
-        return [
-          ...EVENTS.map((event) =>
-            event?.data?.appointment?.id === appointmentId
-              ? {
-                  ...event,
-                  start: moment(start)?.toDate(),
-                  end: moment(end)?.toDate(),
-                  resourceId: resourceId,
-                }
-              : event,
-          ),
-        ];
-      });
-    },
-    [],
-  );
+  const OmmitDataSala = dataSalas?.Result?.map((item) => {
+    return {
+      id: item.id,
+      title: item.nome + " - " + item.capacidade,
+    };
+  });
 
-  const handleSelectSlot = useCallback(
-    ({ start, end, resourceId }: SlotInfo) => {
-      const professor = window.prompt("Nome do Responsável");
-      const id = Math.floor(Math.random() * 1000);
-      if (professor) {
-        setEvents((prev) => [
-          ...prev,
-          {
-            start,
-            end,
-            isDraggable: true,
-            data: {
-              appointment: {
-                id,
-                professor,
-              },
-            },
-            resourceId,
-          },
-        ]);
-      }
-    },
-    [setEvents],
-  );
+  const OmmitDataAgenda = dataAgenda?.Result.map((item) => {
+    const appointments = item.Appoiments.map((appointment) => {
+      const dataHora = new Date(appointment.data + "T" + item.HoraInicial);
+      const dataHoraFinal = new Date(appointment.data + "T" + item.HoraFinal);
 
-  const handleSelectEvent = useCallback(
-    (data: CustomCalendarEvent) => {
-      setData(data), setIsModalOpen(!isModalOpen);
-    },
-    [isModalOpen],
-  );
+      return {
+        resourceId: item.IdSala,
+        start: dataHora,
+        end: dataHoraFinal,
+        idAgendamento: appointment.id,
+        tema: item.Tema,
+        Solicitante: item.Solicitante,
+      };
+    });
+
+    return appointments;
+  }).flat();
+
+  // console.log(OmmitDataAgenda);
+
+  // const [events, setEvents] = useState<CustomCalendarEventType[]>(EVENTS);
+  // const onChangeEventTime = useCallback(
+  //   (
+  //     start: Date,
+  //     end: Date,
+  //     appointmentId: number | undefined,
+  //     resourceId: number,
+  //   ) => {
+  //     setEvents(() => {
+  //       return [
+  //         ...EVENTS.map((event) =>
+  //           event?.data?.appointment?.id === appointmentId
+  //             ? {
+  //                 ...event,
+  //                 start: moment(start)?.toDate(),
+  //                 end: moment(end)?.toDate(),
+  //                 resourceId: resourceId,
+  //               }
+  //             : event,
+  //         ),
+  //       ];
+  //     });
+  //   },
+  //   [],
+  // );
+
+  // const handleSelectSlot = useCallback(
+  //   ({ start, end, resourceId }: SlotInfo) => {
+  //     const professor = window.prompt("Nome do Responsável");
+  //     const id = Math.floor(Math.random() * 1000);
+  //     if (professor) {
+  //       setEvents((prev) => [
+  //         ...prev,
+  //         {
+  //           start,
+  //           end,
+  //           isDraggable: true,
+  //           data: {
+  //             appointment: {
+  //               id,
+  //               professor,
+  //             },
+  //           },
+  //           resourceId,
+  //         },
+  //       ]);
+  //     }
+  //   },
+  //   [setEvents],
+  // );
+
+  // const handleSelectEvent = useCallback(
+  //   (data: CustomCalendarEventType) => {
+  //     setData(data), setIsModalOpen(!isModalOpen);
+  //   },
+  //   [isModalOpen],
+  // );
 
   return (
     <div>
@@ -84,32 +102,9 @@ export default function Agenda() {
         <CustomCalendar
           defaultView="day"
           views={["day"]}
-          resourceMap={resourceMap}
+          resourceMap={OmmitDataSala}
           resizable
-          onEventDrop={({ start, end, event, resourceId }) => {
-            onChangeEventTime(
-              start as Date,
-              end as Date,
-              event?.data?.appointment?.id,
-              resourceId,
-            );
-          }}
-          onEventResize={({ start, end, event, resourceId }) => {
-            onChangeEventTime(
-              start as Date,
-              end as Date,
-              event?.data?.appointment?.id,
-              resourceId,
-            );
-          }}
-          event={events}
-          onSelectSlot={handleSelectSlot}
-          onSelectEvent={handleSelectEvent}
-        />
-        <Modal2
-          onClose={() => setIsModalOpen(!isModalOpen)}
-          isOpen={isModalOpen}
-          dados={data}
+          event={OmmitDataAgenda}
         />
       </Layout>
     </div>

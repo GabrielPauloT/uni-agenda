@@ -1,14 +1,22 @@
-export type Agendamento = {
-  id?: number;
-  idsala: number;
-  idsolicitante: number;
-  idusuario: number;
-  diasemana: number[];
-  horainicial: string;
-  horafinal: string;
-  datainicio: Date;
-  datafinal: Date;
-  tema: string;
-  createdat?: string;
-  updatedat?: string;
+import { DiaSemanaEnum } from "@/@types";
+
+export type AppointmentType = {
+  id: number;
+  data: string;
+};
+
+export type AgendamentoType = {
+  Id: number;
+  IdSala: number;
+  Solicitante: string;
+  IdUsuario: number;
+  DiaSemana: DiaSemanaEnum[];
+  Appoiments: AppointmentType[];
+  HoraInicial: string;
+  HoraFinal: string;
+  DataInicio: Date;
+  DataFinal: Date;
+  Tema: string;
+  CriadoEm?: Date;
+  AtualizadoEm?: Date;
 };
