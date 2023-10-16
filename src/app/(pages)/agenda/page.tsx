@@ -65,12 +65,12 @@ export default function Agenda() {
         const dataHora = new Date(appointment.data + "T" + item.HoraInicial);
         const dataHoraFinal = new Date(appointment.data + "T" + item.HoraFinal);
         return {
-          resourceId: item.IdSala,
+          resourceId: item.Sala.id,
           start: dataHora,
           end: dataHoraFinal,
           idAgendamento: appointment.id,
           tema: item.Tema,
-          Solicitante: item.Solicitante,
+          Solicitante: item.Solicitante.nome,
           horaInical: item.HoraInicial,
           horaFinal: item.HoraFinal,
           dataInicial: item.DataInicio,
@@ -106,31 +106,6 @@ export default function Agenda() {
   //     });
   //   },
   //   [],
-  // );
-
-  // const handleSelectSlot = useCallback(
-  //   ({ start, end, resourceId }: SlotInfo) => {
-  //     const professor = window.prompt("Nome do Responsável");
-  //     const id = Math.floor(Math.random() * 1000);
-  //     if (professor) {
-  //       setEvents((prev) => [
-  //         ...prev,
-  //         {
-  //           start,
-  //           end,
-  //           isDraggable: true,
-  //           data: {
-  //             appointment: {
-  //               id,
-  //               professor,
-  //             },
-  //           },
-  //           resourceId,
-  //         },
-  //       ]);
-  //     }
-  //   },
-  //   [setEvents],
   // );
 
   const handleSelectSlot = useCallback(

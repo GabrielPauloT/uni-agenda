@@ -34,9 +34,9 @@ export type SolicitanteType = {
 
 export type ListarAgendamentoType = {
   Id: number;
-  IdSala: SalaType;
+  Sala: SalaType;
   Solicitante: SolicitanteType;
-  IdUsuario: UsuarioType;
+  Usuario: UsuarioType;
   DiaSemana: DiaSemanaEnum[];
   Appoiments: AppointmentType[];
   HoraInicial: string;
