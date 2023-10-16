@@ -10,7 +10,7 @@ export default function Solicitantes() {
   const [page, setPage] = useState(1);
   const perPage = 6;
 
-  const { data: solicitanteData } = SolicitanteQuery.useFindAllSolicitante(
+  const { data: solicitanteData } = SolicitanteQuery.useSolicitante(
     page,
     perPage,
   );

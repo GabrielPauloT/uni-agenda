@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 
-import { AgendamentoType } from "@/service";
+import { ListarAgendamentoType } from "@/service";
 
 export type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSave?: (eventData: AgendamentoType) => void;
-  dados?: AgendamentoType;
+  onSave?: (eventData: ListarAgendamentoType) => void;
+  dados?: ListarAgendamentoType;
 };
 
 export type CommonModalProps = {

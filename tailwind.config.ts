@@ -19,7 +19,7 @@ const config: Config = {
         nun: ["Nunito", "sans-serif"],
       },
       width: {
-        "500": "31.25rem",
+        "50%": "50%",
       },
       border: {
         "primary-100": "#00476C",

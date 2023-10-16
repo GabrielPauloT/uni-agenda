@@ -1,10 +1,10 @@
 export type InputProps = {
-  value: string;
+  value: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
+  placeholder: string | undefined;
   id: string;
   type: string;
-  title: string;
+  title: string | number;
   name: string;
-  required: boolean;
+  required?: boolean;
 };

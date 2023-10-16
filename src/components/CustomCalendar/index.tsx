@@ -46,7 +46,7 @@ export function CustomCalendar({
   onEventResize,
   onEventDrop,
   onSelectSlot,
-  // onSelectEvent,
+  onSelectEvent,
   resourceMap,
   views,
   defaultView,
@@ -86,7 +86,9 @@ export function CustomCalendar({
         onEventDrop={onEventDrop}
         events={event}
         onSelectSlot={onSelectSlot}
-        // onSelectEvent={onSelectEvent}
+        onSelectEvent={(event: object) =>
+          onSelectEvent(event as AgendaEventType)
+        }
       />
     </div>
   );

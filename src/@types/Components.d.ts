@@ -1,10 +1,47 @@
+import { DiaSemanaEnum } from ".";
+
+export type UsuarioType = {
+  id: number;
+  nome: string;
+  email: string;
+  senha: string;
+  createdat?: Date;
+  updatedat?: Date;
+};
+
+export type SalaType = {
+  id: number;
+  idtiposala: number;
+  nomedasala: string;
+  capacidade: number;
+  createdat?: Date;
+  updatedat?: Date;
+};
+
+export type SolicitanteType = {
+  id: number;
+  idtiposolicitante: number;
+  nome: string;
+  email: string;
+  criadoEm?: Date;
+  atualizadoEm?: Date;
+};
+
 export type AgendaEventType = {
   resourceId: number;
   start: Date;
   end: Date;
   idAgendamento: number;
   tema: string;
-  Solicitante: string;
+  sala: SalaType;
+  Solicitante: SolicitanteType;
+  usuario: UsuarioType;
+  DiaSemana: DiaSemanaEnum[];
+  falta: Record<string, boolean> | boolean;
+  horaInical: item.HoraInicial;
+  horaFinal: item.HoraFinal;
+  dataInicial: item.DataInicio;
+  dataFinal: item.DataFinal;
 };
 
 declare module "react-big-calendar/" {

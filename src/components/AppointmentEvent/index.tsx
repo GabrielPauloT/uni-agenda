@@ -3,24 +3,24 @@ import { EventProps } from "react-big-calendar";
 
 import { AgendaEventType } from "@/@types";
 
-type Arroz = {
+type EventType = {
   data: EventProps<AgendaEventType>;
 };
 
 // import { AppointmentStatusCode, EVENT_STATUS_COLORS } from "./const";
-export function AppointmentEvent({ data }: Arroz) {
+export function AppointmentEvent({ data }: EventType) {
   //   const background = EVENT_STATUS_COLORS[status as AppointmentStatusCode];
   return (
-    <div className={`h-full p-1 text-black`}>
+    <div className={"h-full p-1"}>
       <div className="flex items-center justify-between">
-        <div className="flex ">
-          <p className="text-xs text-white">
-            Responsável: {data.event.Solicitante}
-          </p>
+        <div className="mb-2 flex w-full justify-center border text-center align-middle">
+          <p className="text-center text-xs text-white">{data.event.tema}</p>
         </div>
-        {/* <div className="flex">
-          <p className="text-xs">{resource}</p>
-        </div> */}
+      </div>
+      <div className="flex ">
+        <p className="text-xs text-white">
+          Responsável: {data.event.Solicitante}
+        </p>
       </div>
       <div className="mt-4">
         {/* {address.split("\n").map((add, index) => (

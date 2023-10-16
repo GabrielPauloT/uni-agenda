@@ -1,7 +1,10 @@
 import { ReactQueryKeysEnum } from "@/@types/enums/reactQuery";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { AgendamentoRequest } from "../requests";
+import { createAgendamento } from "../requests/AgendamentoRequest";
+
+import { CreateAgendamentoType } from "..";
 
 export function useAgendamento() {
   return useQuery({
@@ -11,4 +14,12 @@ export function useAgendamento() {
       return data;
     },
   });
+}
+
+export function useCreateAgendamento() {
+  const mutation = useMutation({
+    mutationFn: (agendamentoData: CreateAgendamentoType) =>
+      createAgendamento(agendamentoData),
+  });
+  return mutation;
 }
