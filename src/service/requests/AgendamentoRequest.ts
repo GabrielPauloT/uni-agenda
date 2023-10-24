@@ -8,5 +8,5 @@ export function findAllAgendamento() {
 }
 
 export function createAgendamento(agendamentoData: CreateAgendamentoType) {
-  return api.post("/agendamento", agendamentoData);
+  return api.post("/agendamentos", agendamentoData);
 }

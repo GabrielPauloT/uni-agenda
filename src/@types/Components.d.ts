@@ -28,20 +28,23 @@ export type SolicitanteType = {
 };
 
 export type AgendaEventType = {
+  id: number;
+  IdSoliciante: number;
   resourceId: number;
   start: Date;
   end: Date;
   idAgendamento: number;
+  dataAgendamento: Date;
   tema: string;
   sala: SalaType;
   Solicitante: SolicitanteType;
   usuario: UsuarioType;
   DiaSemana: DiaSemanaEnum[];
   falta: Record<string, boolean> | boolean;
-  horaInical: item.HoraInicial;
-  horaFinal: item.HoraFinal;
-  dataInicial: item.DataInicio;
-  dataFinal: item.DataFinal;
+  horaInical: string;
+  horaFinal: string;
+  dataInicial: string;
+  dataFinal: string;
 };
 
 declare module "react-big-calendar/" {

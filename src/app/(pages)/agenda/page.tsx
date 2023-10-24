@@ -4,8 +4,6 @@ import { useCallback, useState } from "react";
 import { SlotInfo } from "react-big-calendar/";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
-import moment from "moment";
-
 import { ReactQueryKeysEnum } from "@/@types";
 import { AgendaEventType } from "@/@types/Components";
 import { CustomCalendar, Layout, Modal } from "@/components";
@@ -24,6 +22,7 @@ import { CriacaoAgendamentoType } from "./type";
 export default function Agenda() {
   const queryCliente = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [toast, setToast] = useState<ToastStateType>();
   const [agendamento, setAgendamento] = useState<AgendaEventType>();
   const [criacaoAgendamentoAtual, setCriacaoAgendamentoAtual] =
@@ -34,7 +33,8 @@ export default function Agenda() {
 
   const closeModal = () => {
     formMethods.reset();
-    // resetData();
+    // setAgendamento(undefined);
+    // setCriacaoAgendamentoAtual(undefined);
     setIsModalOpen(false);
   };
 
@@ -65,10 +65,12 @@ export default function Agenda() {
         const dataHora = new Date(appointment.data + "T" + item.HoraInicial);
         const dataHoraFinal = new Date(appointment.data + "T" + item.HoraFinal);
         return {
+          id: item.Id,
           resourceId: item.Sala.id,
           start: dataHora,
           end: dataHoraFinal,
           idAgendamento: appointment.id,
+          dataAgendamento: appointment.data,
           tema: item.Tema,
           Solicitante: item.Solicitante.nome,
           horaInical: item.HoraInicial,
@@ -82,80 +84,49 @@ export default function Agenda() {
       return appointments;
     }).flat() || [];
 
-  // const [events, setEvents] = useState<CustomCalendarEventType[]>(EVENTS);
-  // const onChangeEventTime = useCallback(
-  //   (
-  //     start: Date,
-  //     end: Date,
-  //     appointmentId: number | undefined,
-  //     resourceId: number,
-  //   ) => {
-  //     setEvents(() => {
-  //       return [
-  //         ...EVENTS.map((event) =>
-  //           event?.data?.appointment?.id === appointmentId
-  //             ? {
-  //                 ...event,
-  //                 start: moment(start)?.toDate(),
-  //                 end: moment(end)?.toDate(),
-  //                 resourceId: resourceId,
-  //               }
-  //             : event,
-  //         ),
-  //       ];
-  //     });
-  //   },
-  //   [],
-  // );
-
   const handleSelectSlot = useCallback(
     ({ start, end, resourceId }: SlotInfo) => {
+      // dados da tabela
       setCriacaoAgendamentoAtual({
         start: start,
         end: end,
         resourceId: resourceId,
       });
+      setTitle("Criar Agendamento");
       setIsModalOpen(true);
     },
     [],
   );
 
   const onSubmit: SubmitHandler<AgendaEventType> = (data) => {
-    console.log(data);
-    // if (title === "Editar Usuario") {
-    //   updateUsuarioMutation
-    //     .mutateAsync({
-    //       userId: userData.Id,
-    //       usuarioData: data,
-    //     })
-    //     .then(() => {
-    //       showSuccessToast("Usuario atualizado com sucesso");
-    //       queryCliente.invalidateQueries([ReactQueryKeysEnum.USUARIO_FINDALL]);
-    //     })
-    //     .catch(() => {
-    //       showErrorToast("Erro ao atualizar usuario");
-    //     });
-    // } else if (title === "Cadastrar Usuario") {
     if (!(criacaoAgendamentoAtual && agendamento)) return;
-    const horaInicial = moment(criacaoAgendamentoAtual.start).format("HH:mm");
-    const horaFinal = moment(criacaoAgendamentoAtual.end).format("HH:mm");
-    const agendamentoData: CreateAgendamentoType = {
-      ...data,
-      HoraInicial: horaInicial,
-      HoraFinal: horaFinal,
-      DataInicio: criacaoAgendamentoAtual.start,
-      DataFinal: criacaoAgendamentoAtual.end,
-      IdSala: criacaoAgendamentoAtual.resourceId as number,
-      DiaSemana: agendamento.DiaSemana,
-      IdUsuario: agendamento.usuario.id,
-      IdSolicitante: agendamento.Solicitante.id,
-      Tema: agendamento.tema,
-    };
 
-    console.log(
-      criacaoAgendamentoAtual?.resourceId,
-      typeof criacaoAgendamentoAtual?.resourceId,
-    );
+    // const horaInicial = moment(criacaoAgendamentoAtual.start).format("HH:mm");
+    // const horaFinal = moment(criacaoAgendamentoAtual.end).format("HH:mm");
+    // // const agendamentoData: CreateAgendamentoType = {
+
+    //   HoraInicial: horaInicial,
+    //   HoraFinal: horaFinal,
+    //   DataInicio: criacaoAgendamentoAtual.start,
+    //   DataFinal: criacaoAgendamentoAtual.end,
+    //   IdSala: criacaoAgendamentoAtual.resourceId as number,
+    //   DiaSemana: agendamento.DiaSemana,
+    //   IdUsuario: agendamento.usuario.id,
+    //   IdSolicitante: agendamento.Solicitante.id,
+    //   Tema: agendamento.tema,
+    // };
+    const agendamentoData: CreateAgendamentoType = {
+      HoraInicial: data.horaInical,
+      HoraFinal: data.horaFinal,
+      DataInicio: data.start,
+      DataFinal: data.end,
+      IdSala: Number(data.resourceId),
+      // @ts-expect-error
+      DiaSemana: data.DiaSemana.map((item) => parseInt(item.value)),
+      IdUsuario: 1, //TODO PEGAR DO LOGIN
+      IdSolicitante: Number(data.IdSoliciante),
+      Tema: data.tema,
+    };
     createAgendamentoMutation
       .mutateAsync(agendamentoData)
       .then(() => {
@@ -167,18 +138,16 @@ export default function Agenda() {
       .catch(() => {
         showErrorToast("Erro ao cadastra o agendamento");
       });
-    // }
     closeModal();
   };
 
   const handleSelectEvent = useCallback(
     (data: AgendaEventType) => {
-      setTitle(`Editar agendamento do ${data.Solicitante}`);
+      setTitle("Editar agendamento");
       setAgendamento(data), setIsModalOpen(!isModalOpen);
     },
     [isModalOpen],
   );
-
   return (
     <div>
       <Layout pageTitle="Agenda">
@@ -194,18 +163,11 @@ export default function Agenda() {
         <FormProvider {...formMethods}>
           <Modal isOpen={isModalOpen} title={title}>
             <ModalInputAgenda
+              dataTableCreated={criacaoAgendamentoAtual}
               data={agendamento}
-              isEdit={!(title === "Editar Usuario")}
+              isEdit={title !== "Criar Agendamento"}
               onClick={closeModal}
               onSubmit={formMethods.handleSubmit(onSubmit)}
-              onChageNome={(e) =>
-                setAgendamento({
-                  ...agendamento,
-                  Solicitante: {
-                    nome: e.target.value,
-                  },
-                } as AgendaEventType)
-              }
               onChageDataFim={(e) =>
                 setAgendamento({
                   ...agendamento,
@@ -230,12 +192,13 @@ export default function Agenda() {
                   horaFinal: e.target.value,
                 } as AgendaEventType)
               }
-              onChageFalta={(e) =>
+              onChageFalta={(e) => {
+                console.log(e.target.checked, e);
                 setAgendamento({
                   ...agendamento,
                   falta: e.target.checked,
-                } as AgendaEventType)
-              }
+                } as AgendaEventType);
+              }}
               onChageTema={(e) =>
                 setAgendamento({
                   ...agendamento,

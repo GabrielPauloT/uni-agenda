@@ -9,6 +9,8 @@ export function findAllSolicitante(
   nome?: string,
 ) {
   return api.get<ApiResult<Solicitante[]>>(
-    `/solicitantes/${page}/page/${perPage}/per-page/nome-solicitante/${nome}`,
+    `/solicitantes/${page}/page/${perPage}/per-page/nome-solicitante/${
+      nome ? nome : ""
+    }`,
   );
 }

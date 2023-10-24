@@ -51,12 +51,12 @@ export type ListarAgendamentoType = {
 
 export type CreateAgendamentoType = {
   IdSala: number;
-  IdSolicitante: number;
   IdUsuario: number;
-  DiaSemana: DiaSemanaEnum[];
-  HoraInicial: string;
-  HoraFinal: string;
+  IdSolicitante: number;
   DataInicio: Date;
   DataFinal: Date;
   Tema: string;
+  DiaSemana: DiaSemanaEnum[];
+  HoraInicial: string;
+  HoraFinal: string;
 };

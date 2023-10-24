@@ -11,7 +11,6 @@ export function useAgendamento() {
     queryKey: [ReactQueryKeysEnum.AGENDAMENTO_FINDALL],
     queryFn: async () => {
       const { data } = await AgendamentoRequest.findAllAgendamento();
-      console.log(data);
       return data;
     },
   });

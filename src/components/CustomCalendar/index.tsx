@@ -9,7 +9,7 @@ import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 
 import moment from "moment";
 
-import { AgendaEventType } from "@/@types";
+import { AgendaEventType } from "@/@types/Components";
 
 import { CustomCalendarProps } from "./types";
 
@@ -60,7 +60,7 @@ export function CustomCalendar({
   const Year = new Date().getFullYear();
 
   return (
-    <div className="mt-0 rounded-lg bg-white p-4 shadow-md max-md:ml-2 max-md:mt-16">
+    <div className="mt-0 w-screen rounded-lg bg-white p-4 shadow-md max-md:ml-2 max-md:mt-16">
       <DnDCalendar
         // draggableAccessor={(event: AgendaEventType) =>
         //   event.isDraggable === true

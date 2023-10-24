@@ -1,5 +1,3 @@
-import { useFormContext } from "react-hook-form";
-
 import { InputProps } from "./type";
 
 export function Input({
@@ -11,19 +9,16 @@ export function Input({
   title,
   name,
   required,
+  register,
+  erros,
 }: InputProps) {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext();
-
   return (
     <div>
       <label
         className="mb-2 block text-sm font-bold text-gray-700"
         htmlFor={name}
       >
-        {title}:
+        {title}
       </label>
       <input
         {...register(name, {
@@ -37,7 +32,7 @@ export function Input({
         placeholder={placeholder}
         name={name}
       />
-      {errors[name] && (
+      {erros[name] && (
         <span className="text-red-500">Este campo é obrigatório</span>
       )}
     </div>

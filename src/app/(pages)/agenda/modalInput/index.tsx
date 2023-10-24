@@ -1,15 +1,25 @@
+import { useEffect, useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+
 import moment from "moment";
 
+import { DiaSemanaEnum } from "@/@types";
 import { Input } from "@/components";
+import { useCreateFalta } from "@/service/hooks/FaltaQuery";
+import { useSala } from "@/service/hooks/SalaQuery";
 import { useSolicitante } from "@/service/hooks/SolicitanteQuery";
+
+const animatedComponents = makeAnimated();
 
 import { ModalAgendaInputType } from "./type";
 
 export function ModalInputAgenda({
   data,
+  dataTableCreated,
   isEdit,
   onChageTema,
-  onChageNome,
   onChageDataIni,
   onChageDataFim,
   onChageHoraIni,
@@ -18,119 +28,257 @@ export function ModalInputAgenda({
   onClick,
   onSubmit,
 }: ModalAgendaInputType) {
+  const [totalRecordsSolicitante, setTotalRecordSolicitante] = useState(0);
+  const [totalRecordsSala, setTotalRecordSala] = useState(0);
   const { data: solicitanteData } = useSolicitante(
     1,
-    200,
+    totalRecordsSolicitante,
     data?.Solicitante?.toString() ?? undefined,
   );
-  function formatDate(date: string) {
-    const dataT = moment(date).format("YYYY-MM-DD");
+  const { data: salaData } = useSala(1, totalRecordsSala);
 
-    return dataT;
+  const createFaltaMutation = useCreateFalta();
+
+  useEffect(() => {
+    setTotalRecordSolicitante(solicitanteData?.TotalRecords || 0);
+    setTotalRecordSala(salaData?.TotalRecords || 0);
+  }, [solicitanteData, salaData]);
+
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext();
+
+  const diaSemanaOptions = Object.keys(DiaSemanaEnum)
+    .filter((key) => isNaN(Number(key)))
+    .map((key) => ({
+      value: DiaSemanaEnum[key as keyof typeof DiaSemanaEnum],
+      label: key,
+    }));
+
+  function formatDate(date: string, isEnd?: boolean) {
+    if (!!isEnd && !isEdit) {
+      return moment(date).format("YYYY-MM-DD");
+    }
+    return moment(date).add(7, "day").format("YYYY-MM-DD");
   }
+  function formatHours(date: string) {
+    const hourFormated = moment(date).format("HH:mm");
+
+    return hourFormated;
+  }
+  console.log(data?.id);
+  console.log(data?.dataAgendamento);
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-6">
-      <select id="select-state" placeholder="Pick a state...">
-        <option value="">Select a state...</option>
-        <option value="AL">Alabama</option>
-        <option value="AK">Alaska</option>
-        <option value="AZ">Arizona</option>
-        <option value="AR">Arkansas</option>
-        <option value="CA">California</option>
-        <option value="CO">Colorado</option>
-        <option value="CT">Connecticut</option>
-        <option value="DE">Delaware</option>
-        <option value="DC">District of Columbia</option>
-        <option value="FL">Florida</option>
-        <option value="GA">Georgia</option>
-        <option value="HI">Hawaii</option>
-        <option value="ID">Idaho</option>
-        <option value="IL">Illinois</option>
-        <option value="IN">Indiana</option>
-      </select>
+      <div>
+        <label className="mb-2 block text-sm font-bold text-gray-700">
+          Solicitante:
+        </label>
+        <select
+          title="Lista de solicitantes"
+          id="idSoliciante"
+          placeholder="Selecione o solicitante"
+          className="h-10 w-full rounded-md border border-gray-300 pl-2 text-sm font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+          {...register("IdSoliciante", {
+            required: true,
+          })}
+        >
+          {solicitanteData?.Result.map((item) => {
+            return (
+              <option key={item.id} value={item.id}>
+                {item.nome}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+      <div>
+        <label className="mb-2 block text-sm font-bold text-gray-700">
+          Dias da Semana:
+        </label>
+        <Controller
+          name="DiaSemana"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Select
+              isMulti
+              components={animatedComponents}
+              name="DiaSemana"
+              options={diaSemanaOptions}
+              classNamePrefix="select"
+              styles={{
+                control: (provided) => ({
+                  ...provided,
+                  borderRadius: "8px",
+                  border: "1px solid #ccc",
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected ? "#3182ce" : "white",
+                  color: state.isSelected ? "white" : "black",
+                }),
+                multiValue: (provided) => ({
+                  ...provided,
+                  borderRadius: "8px",
+                  border: "1px solid #ccc",
+                  width: "fit-content",
+                }),
+              }}
+              onChange={(selectedValues: any) => {
+                onChange(selectedValues);
+              }}
+              value={value}
+            />
+          )}
+        />
+      </div>
       <Input
-        type="search"
-        title="Nome do Solicitante"
-        placeholder="Nome do Solicitante"
-        id="Nome"
-        name="Nome"
-        value={data?.Solicitante.nome || ""}
-        onChange={onChageNome}
-        required={isEdit}
-      />
-      <Input
+        register={register}
+        erros={errors}
         type="text"
-        title="Tema"
+        title="Tema:"
         placeholder="Tema"
         id="Tema"
-        name="Tema"
+        name="tema"
         value={data?.tema || ""}
         onChange={onChageTema}
         required={isEdit}
       />
+      <div>
+        <label className="mb-2 block text-sm font-bold text-gray-700">
+          Sala:
+        </label>
+        <select
+          title="Lista de salas"
+          id="resourceId"
+          placeholder="Selecione a sala"
+          className="h-10 w-full rounded-md border border-gray-300 pl-2 text-sm font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+          {...register("resourceId", {
+            required: true,
+          })}
+          value={dataTableCreated?.resourceId ?? ""}
+        >
+          {salaData?.Result.map((sala) => (
+            <option key={sala.id} value={sala.id}>
+              {sala.nome}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="flex w-full gap-3">
         <div className="flex w-50% flex-col">
-          <label>Data Inicio:</label>
-          <input
+          <Input
+            register={register}
+            erros={errors}
             type="date"
-            placeholder="Data"
+            title="Data Inicio:"
+            placeholder="Data Inicio"
+            id="Data Inicio"
             name="start"
-            value={formatDate(data?.dataInicial)}
+            value={formatDate(
+              isEdit
+                ? data?.dataInicial || ""
+                : dataTableCreated?.start.toISOString() || "",
+              true,
+            )}
             onChange={onChageDataIni}
-            className="rounded-md border-2 border-gray-300 p-2"
             required={isEdit}
           />
         </div>
         <div className="flex w-50% flex-col">
-          <label>Data Fim:</label>
-          <input
+          <Input
+            register={register}
+            erros={errors}
             type="date"
-            placeholder="Data"
+            title="Data Fim:"
+            placeholder="Data Fim"
+            id="Data Fim"
             name="end"
-            value={formatDate(data?.dataFinal)}
+            value={formatDate(
+              isEdit
+                ? data?.dataFinal || ""
+                : dataTableCreated?.end.toISOString() || "",
+            )}
             onChange={onChageDataFim}
-            className="rounded-md border-2 border-gray-300 p-2"
             required={isEdit}
           />
         </div>
       </div>
       <div className="flex w-full gap-3">
         <div className="flex w-50% flex-col">
-          <label>Hora Inicio:</label>
-          <input
+          <Input
+            register={register}
+            erros={errors}
             type="time"
-            placeholder="Time"
-            name="start"
-            value={data?.horaInical}
+            title="Hora Inicio:"
+            placeholder="Hora Inicio"
+            id="Hora Inicio"
+            name="horaInical"
+            value={
+              isEdit
+                ? data?.horaInical || ""
+                : formatHours(dataTableCreated?.start.toISOString() || "")
+            }
             onChange={onChageHoraIni}
-            className="rounded-md border-2 border-gray-300 p-2"
             required={isEdit}
           />
         </div>
         <div className="flex w-50% flex-col">
-          <label>Hora Fim:</label>
-          <input
+          <Input
+            register={register}
+            erros={errors}
             type="time"
-            placeholder="Time"
-            name="end"
-            value={data?.horaFinal}
+            title="Hora Fim:"
+            placeholder="Hora Fim"
+            id="Hora fim"
+            name="horaFinal"
+            value={
+              isEdit
+                ? data?.horaFinal || ""
+                : formatHours(dataTableCreated?.end.toISOString() || "")
+            }
             onChange={onChageHoraFim}
-            className="rounded-md border-2 border-gray-300 p-2"
             required={isEdit}
           />
         </div>
       </div>
-      <div className="ml-1 flex items-center gap-3">
-        <input
-          type="checkbox"
-          name="end"
-          checked={data?.falta as boolean}
-          onChange={onChageFalta}
-          className="h-5 w-5 rounded border-gray-300 text-blue-500 focus:ring-2 focus:ring-blue-500"
-        />
-        <label className="text-gray-700">Faltou</label>
-      </div>
+      {isEdit && (
+        // <div className="flex flex-col items-center gap-3">
+        //   <label className="text-gray-700">Solicitante faltou?</label>
+        //   <input
+        //     type="checkbox"
+        //     name="end"
+        //     checked={data?.falta as boolean}
+        //     onChange={onChageFalta}
+        //     className="h-5 w-5 rounded border-gray-300 text-blue-500 focus:ring-2 focus:ring-blue-500"
+        //   />
+        // </div>
+        <div className="flex flex-col items-center gap-3">
+          <label className="text-gray-700">Solicitante faltou?</label>
+          <input
+            type="checkbox"
+            name="falta"
+            checked={data?.falta as boolean}
+            onChange={(e) => {
+              const isChecked = e.target.checked;
 
+              if (isChecked && data?.id) {
+                const faltaData = {
+                  IdAgendamento: data.id,
+                  Data: new Date(data?.dataAgendamento).toISOString(),
+                };
+
+                createFaltaMutation.mutate(faltaData);
+              }
+              // @ts-expect-error
+              onChageFalta(e);
+            }}
+            className="h-5 w-5 rounded border-gray-300 text-blue-500 focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      )}
       <div className="flex justify-center gap-5">
         <button
           type="submit"

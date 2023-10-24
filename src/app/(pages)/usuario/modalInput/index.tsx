@@ -1,3 +1,5 @@
+import { useFormContext } from "react-hook-form";
+
 import { Input } from "@/components";
 
 import { ModalInputProps } from "./type";
@@ -11,9 +13,15 @@ export function ModalInput({
   onChageSenha,
   isEdit,
 }: ModalInputProps) {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-6">
       <Input
+        register={register}
+        erros={errors}
         type="text"
         title="Nome"
         placeholder="Nome"
@@ -24,6 +32,8 @@ export function ModalInput({
         required={isEdit}
       />
       <Input
+        register={register}
+        erros={errors}
         type="email"
         title="Email"
         placeholder="Email"
@@ -34,6 +44,8 @@ export function ModalInput({
         required={isEdit}
       />
       <Input
+        register={register}
+        erros={errors}
         type="Password"
         title="Senha"
         placeholder="Senha"
