@@ -1,7 +1,7 @@
 import { ApiResult } from "@/@types/API/ApiResult";
 
 import { api } from "../api";
-import { Solicitante } from "../types";
+import { Solicitante, SolicitanteForm } from "../types";
 
 export function findAllSolicitante(
   page: number,
@@ -13,4 +13,8 @@ export function findAllSolicitante(
       nome ? nome : ""
     }`,
   );
+}
+
+export function createSolicitante(solicitanteData: SolicitanteForm) {
+  return api.post("/solicitantes", solicitanteData);
 }

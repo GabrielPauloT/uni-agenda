@@ -4,15 +4,21 @@ import { useCallback, useState } from "react";
 import { SlotInfo } from "react-big-calendar/";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
+import moment from "moment-timezone";
+
 import { ReactQueryKeysEnum } from "@/@types";
 import { AgendaEventType } from "@/@types/Components";
 import { CustomCalendar, Layout, Modal } from "@/components";
 import {
+  AppointmentType,
   CreateAgendamentoType,
+  HorarioAlterado,
+  ListarAgendamentoType,
   useAgendamento,
   useCreateAgendamento,
 } from "@/service";
 import { useSala } from "@/service/hooks/SalaQuery";
+import { HorarioAlteradoRequest } from "@/service/requests";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { ToastStateType } from "../usuario/type";
@@ -40,7 +46,7 @@ export default function Agenda() {
 
   const { data: dataSalas } = useSala(1, 100);
 
-  const { data: dataAgenda } = useAgendamento();
+  const { data: dataAgenda, refetch: refetchDataAgenda } = useAgendamento();
 
   const createAgendamentoMutation = useCreateAgendamento();
 
@@ -59,11 +65,39 @@ export default function Agenda() {
     setToast({ type: "error", message });
   };
 
+  const checkHorario = (
+    horariosAlterados: HorarioAlterado[],
+    agendamento: ListarAgendamentoType,
+    appoiment: AppointmentType,
+  ) => {
+    const horarioAlterado = horariosAlterados.find(
+      // Verificar se vai dar problema de timezone
+      (item) =>
+        moment(item.data).tz("America/Sao_Paulo").utc().format("YYYY-MM-DD") ===
+        appoiment.data,
+    );
+    return {
+      horarioInicial: horarioAlterado?.horainicial || agendamento.HoraInicial,
+      horarioFinal: horarioAlterado?.horafinal || agendamento.HoraFinal,
+      idHorarioAlterado: horarioAlterado?.id,
+    };
+  };
+
   const OmmitDataAgenda =
     dataAgenda?.Result.map((item) => {
       const appointments = item.Appoiments.map((appointment) => {
-        const dataHora = new Date(appointment.data + "T" + item.HoraInicial);
-        const dataHoraFinal = new Date(appointment.data + "T" + item.HoraFinal);
+        const dataHora = new Date(
+          appointment.data +
+            "T" +
+            checkHorario(item.HorariosAlterados, item, appointment)
+              .horarioInicial,
+        );
+        const dataHoraFinal = new Date(
+          appointment.data +
+            "T" +
+            checkHorario(item.HorariosAlterados, item, appointment)
+              .horarioFinal,
+        );
         return {
           id: item.Id,
           resourceId: item.Sala.id,
@@ -73,11 +107,18 @@ export default function Agenda() {
           dataAgendamento: appointment.data,
           tema: item.Tema,
           Solicitante: item.Solicitante.nome,
-          horaInical: item.HoraInicial,
-          horaFinal: item.HoraFinal,
+          horaInical: checkHorario(item.HorariosAlterados, item, appointment)
+            .horarioInicial,
+          horaFinal: checkHorario(item.HorariosAlterados, item, appointment)
+            .horarioFinal,
           dataInicial: item.DataInicio,
           dataFinal: item.DataFinal,
           falta: Boolean(item?.Falta[appointment.data]),
+          idHorarioAlterado: checkHorario(
+            item.HorariosAlterados,
+            item,
+            appointment,
+          ).idHorarioAlterado,
         };
       });
 
@@ -99,45 +140,51 @@ export default function Agenda() {
   );
 
   const onSubmit: SubmitHandler<AgendaEventType> = (data) => {
-    if (!(criacaoAgendamentoAtual && agendamento)) return;
-
-    // const horaInicial = moment(criacaoAgendamentoAtual.start).format("HH:mm");
-    // const horaFinal = moment(criacaoAgendamentoAtual.end).format("HH:mm");
-    // // const agendamentoData: CreateAgendamentoType = {
-
-    //   HoraInicial: horaInicial,
-    //   HoraFinal: horaFinal,
-    //   DataInicio: criacaoAgendamentoAtual.start,
-    //   DataFinal: criacaoAgendamentoAtual.end,
-    //   IdSala: criacaoAgendamentoAtual.resourceId as number,
-    //   DiaSemana: agendamento.DiaSemana,
-    //   IdUsuario: agendamento.usuario.id,
-    //   IdSolicitante: agendamento.Solicitante.id,
-    //   Tema: agendamento.tema,
-    // };
-    const agendamentoData: CreateAgendamentoType = {
-      HoraInicial: data.horaInical,
-      HoraFinal: data.horaFinal,
-      DataInicio: data.start,
-      DataFinal: data.end,
-      IdSala: Number(data.resourceId),
-      // @ts-expect-error
-      DiaSemana: data.DiaSemana.map((item) => parseInt(item.value)),
-      IdUsuario: 1, //TODO PEGAR DO LOGIN
-      IdSolicitante: Number(data.IdSoliciante),
-      Tema: data.tema,
-    };
-    createAgendamentoMutation
-      .mutateAsync(agendamentoData)
-      .then(() => {
-        showSuccessToast("Agendamento cadastrado com sucesso");
-        queryCliente.invalidateQueries([
-          ReactQueryKeysEnum.AGENDAMENTO_FINDALL,
-        ]);
+    // if (!(criacaoAgendamentoAtual && agendamento)) return;
+    if (title !== "Criar Agendamento" && agendamento?.id) {
+      HorarioAlteradoRequest.createHorarioAlterado({
+        data:
+          moment(agendamento.dataAgendamento)
+            .tz("America/Sao_Paulo")
+            .utc()
+            .format("YYYY-MM-DD") + "T00:00:00.000Z",
+        horainicial: data.horaInical,
+        horafinal: data.horaFinal,
+        IdHorarioAlterado: agendamento.idHorarioAlterado,
+        IdAgendamento: agendamento.id,
       })
-      .catch(() => {
-        showErrorToast("Erro ao cadastra o agendamento");
-      });
+        .then(() => {
+          showSuccessToast("Agendamento alterado com sucesso");
+          refetchDataAgenda();
+        })
+        .catch(() => {
+          showErrorToast("Erro ao alterar o agendamento");
+        });
+    } else {
+      const agendamentoData: CreateAgendamentoType = {
+        HoraInicial: data.horaInical,
+        HoraFinal: data.horaFinal,
+        DataInicio: data.start,
+        DataFinal: data.end,
+        IdSala: Number(data.resourceId),
+        // @ts-expect-error
+        DiaSemana: data.DiaSemana.map((item) => parseInt(item.value)),
+        IdUsuario: 1, //TODO PEGAR DO LOGIN
+        IdSolicitante: Number(data.IdSoliciante),
+        Tema: data.tema,
+      };
+      createAgendamentoMutation
+        .mutateAsync(agendamentoData)
+        .then(() => {
+          showSuccessToast("Agendamento cadastrado com sucesso");
+          queryCliente.invalidateQueries([
+            ReactQueryKeysEnum.AGENDAMENTO_FINDALL,
+          ]);
+        })
+        .catch(() => {
+          showErrorToast("Erro ao cadastra o agendamento");
+        });
+    }
     closeModal();
   };
 

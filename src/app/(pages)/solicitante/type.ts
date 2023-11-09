@@ -1,4 +1,4 @@
-export type Solicitante = {
+export type FormSolicitanteType = {
   Id: number;
   IdTipoSolicitante: number;
   NomeTipoSolicitante: string;
@@ -8,8 +8,8 @@ export type Solicitante = {
   AtualizadoEm: Date;
 };
 
-export type SolicitanteForm = {
-  IdTipoSolicitante: number;
-  NomeSolicitante: string;
-  EmailSolicitante: string;
+export type ModalDataViewType = {
+  Email: string;
+  Nome: string;
+  tipo: string;
 };

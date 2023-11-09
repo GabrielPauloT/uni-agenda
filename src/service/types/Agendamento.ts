@@ -32,6 +32,14 @@ export type SolicitanteType = {
   atualizadoEm?: Date;
 };
 
+export type HorarioAlterado = {
+  id: number;
+  idagendamento: number;
+  data: Date;
+  horainicial: string;
+  horafinal: string;
+};
+
 export type ListarAgendamentoType = {
   Id: number;
   Sala: SalaType;
@@ -39,6 +47,7 @@ export type ListarAgendamentoType = {
   Usuario: UsuarioType;
   DiaSemana: DiaSemanaEnum[];
   Appoiments: AppointmentType[];
+  HorariosAlterados: HorarioAlterado[];
   HoraInicial: string;
   HoraFinal: string;
   DataInicio: Date;

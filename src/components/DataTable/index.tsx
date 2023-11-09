@@ -10,9 +10,10 @@ export type DataTableProps = {
   page: number;
   onNextPageClick: () => void;
   onBackPageClick: () => void;
-  onEditClick: (row: any) => void;
-  onDeleteClick: (row: any) => void;
-  onViewClick: (row: any) => void;
+  onEditClick?: (row: any) => void;
+  onDeleteClick?: (row: any) => void;
+  onViewClick?: (row: any) => void;
+  onRelatorioClick?: (row: any) => void;
 };
 
 export function DataTable({
@@ -25,6 +26,7 @@ export function DataTable({
   onEditClick,
   onDeleteClick,
   onViewClick,
+  onRelatorioClick,
 }: DataTableProps) {
   const totalPages = Math.ceil((total ?? 0) / perPage);
 
@@ -67,26 +69,38 @@ export function DataTable({
                   {row[column]}
                 </td>
               ))}
-              <td className="border-b border-gray-300 px-4 py-2 text-center">
-                <button
-                  onClick={() => onEditClick(row)}
-                  className="mr-2 text-blue-500 hover:text-blue-700"
-                >
-                  <Icons name="MdEdit" size={20} />
-                </button>
-                <button
-                  onClick={() => onDeleteClick(row)}
-                  className="mr-2 text-red-500 hover:text-red-700"
-                >
-                  <Icons name="MdDelete" size={20} />
-                </button>
-                <button
-                  onClick={() => onViewClick(row)}
-                  className="text-green-500 hover:text-green-700"
-                >
-                  <Icons name="MdVisibility" size={20} />
-                </button>
-              </td>
+              {onEditClick && onDeleteClick && onViewClick && (
+                <td className="border-b border-gray-300 px-4 py-2 text-center">
+                  <button
+                    onClick={() => onEditClick(row)}
+                    className="mr-2 text-blue-500 hover:text-blue-700"
+                  >
+                    <Icons name="MdEdit" size={20} />
+                  </button>
+                  <button
+                    onClick={() => onDeleteClick(row)}
+                    className="mr-2 text-red-500 hover:text-red-700"
+                  >
+                    <Icons name="MdDelete" size={20} />
+                  </button>
+                  <button
+                    onClick={() => onViewClick(row)}
+                    className="text-green-500 hover:text-green-700"
+                  >
+                    <Icons name="MdVisibility" size={20} />
+                  </button>
+                </td>
+              )}
+              {onRelatorioClick && (
+                <td className="border-b border-gray-300 px-4 py-2 text-center">
+                  <button
+                    onClick={() => onRelatorioClick(row)}
+                    className="text-blue-500 hover:text-blue-700"
+                  >
+                    <Icons name="MdOutlineSimCardDownload" size={20} />
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

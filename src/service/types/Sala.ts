@@ -1,9 +1,19 @@
-export type Sala = {
+export type TipoSalaType = {
   id: number;
-  idTipoSala?: number;
-  tipo: string;
+  nomedotipo: string;
+};
+
+export type SalaFindType = {
+  id: number;
+  tipo: TipoSalaType;
   nome: string;
   capacidade: number;
-  createdat: Date;
-  updatedat: Date;
+  CriadoEm: Date;
+  AtualizadoEm: Date;
+};
+
+export type CreateSalaType = {
+  NomeDaSala: string;
+  IdTipoDaSala: number;
+  Capacidade: number;
 };

@@ -11,4 +11,5 @@ export type InputProps = {
   required?: boolean;
   register: UseFormRegister<FieldValues>;
   erros: FieldErrors<FieldValues>;
+  disable?: boolean;
 };

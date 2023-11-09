@@ -1,7 +1,10 @@
 import { ReactQueryKeysEnum } from "@/@types/enums/reactQuery";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import { SolicitanteRequest } from "../requests";
+import { createSolicitante } from "../requests/SolicitanteRequest";
+
+import { SolicitanteForm } from "..";
 
 export function useSolicitante(page: number, perPage: number, nome?: string) {
   return useQuery({
@@ -15,4 +18,12 @@ export function useSolicitante(page: number, perPage: number, nome?: string) {
       return data;
     },
   });
+}
+
+export function useCreateSolicitante() {
+  const mutation = useMutation({
+    mutationFn: (solicitanteData: SolicitanteForm) =>
+      createSolicitante(solicitanteData),
+  });
+  return mutation;
 }

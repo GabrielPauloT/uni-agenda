@@ -68,8 +68,6 @@ export function ModalInputAgenda({
 
     return hourFormated;
   }
-  console.log(data?.id);
-  console.log(data?.dataAgendamento);
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-6">
       <div>
@@ -83,12 +81,13 @@ export function ModalInputAgenda({
           className="h-10 w-full rounded-md border border-gray-300 pl-2 text-sm font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
           {...register("IdSoliciante", {
             required: true,
+            disabled: isEdit,
           })}
         >
           {solicitanteData?.Result.map((item) => {
             return (
-              <option key={item.id} value={item.id}>
-                {item.nome}
+              <option key={item.Id} value={item.Id}>
+                {item.NomeSolicitante}
               </option>
             );
           })}
@@ -101,8 +100,10 @@ export function ModalInputAgenda({
         <Controller
           name="DiaSemana"
           control={control}
+          disabled={isEdit}
           render={({ field: { onChange, value } }) => (
             <Select
+              isDisabled={isEdit}
               isMulti
               components={animatedComponents}
               name="DiaSemana"
@@ -145,6 +146,7 @@ export function ModalInputAgenda({
         value={data?.tema || ""}
         onChange={onChageTema}
         required={isEdit}
+        disable={isEdit}
       />
       <div>
         <label className="mb-2 block text-sm font-bold text-gray-700">
@@ -157,6 +159,7 @@ export function ModalInputAgenda({
           className="h-10 w-full rounded-md border border-gray-300 pl-2 text-sm font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
           {...register("resourceId", {
             required: true,
+            disabled: isEdit,
           })}
           value={dataTableCreated?.resourceId ?? ""}
         >
@@ -185,6 +188,7 @@ export function ModalInputAgenda({
             )}
             onChange={onChageDataIni}
             required={isEdit}
+            disable={isEdit}
           />
         </div>
         <div className="flex w-50% flex-col">
@@ -203,6 +207,7 @@ export function ModalInputAgenda({
             )}
             onChange={onChageDataFim}
             required={isEdit}
+            disable={isEdit}
           />
         </div>
       </div>

@@ -1,8 +1,23 @@
 import { ApiResult } from "@/@types/API/ApiResult";
 
 import { api } from "../api";
-import { Sala } from "../types";
+import { CreateSalaType } from "../types";
+import { SalaFindType } from "../types/Sala";
 
 export function findAllSala(page: number, perPage: number) {
-  return api.get<ApiResult<Sala[]>>(`/salas/${page}/page/${perPage}/per-page`);
+  return api.get<ApiResult<SalaFindType[]>>(
+    `/salas/${page}/page/${perPage}/per-page`,
+  );
+}
+
+export function createSala(salaData: CreateSalaType) {
+  return api.post("/salas", salaData);
+}
+
+export function deleteSala(salaId: number) {
+  return api.delete(`/salas/${salaId}`);
+}
+
+export function updateSala(salaId: number, salaData: Partial<CreateSalaType>) {
+  return api.patch(`/salas/${salaId}`, salaData);
 }

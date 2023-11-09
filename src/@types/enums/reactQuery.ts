@@ -19,4 +19,12 @@ export enum ReactQueryKeysEnum {
   SALA_UPDATE = "useUpdateSala",
   SALA_DELETE = "useDeleteSala",
   SALA_FINDBYID = "useFindSalaById",
+  TIPO_SALA_FINDALL = "useFindAllTipoSala",
+  TIPO_SALA_CREATE = "useCreateTipoSala",
+  TIPO_SALA_UPDATE = "useUpdateTipoSala",
+  TIPO_SALA_DELETE = "useDeleteTipoSala",
+  TIPO_SOLICITANTE_FINDALL = "useFindAllTipoSolicitante",
+  TIPO_SOLICITANTE_CREATE = "useCreateTipoSolicitante",
+  TIPO_SOLICITANTE_UPDATE = "useUpdateTipoSolicitante",
+  TIPO_SOLICITANTE_DELETE = "useDeleteTipoSolicitante",
 }

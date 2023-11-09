@@ -10,3 +10,7 @@ export function findAllAgendamento() {
 export function createAgendamento(agendamentoData: CreateAgendamentoType) {
   return api.post("/agendamentos", agendamentoData);
 }
+
+export function updateAgendamento(agendamentoData: CreateAgendamentoType) {
+  return api.patch("/agendamentos", agendamentoData);
+}

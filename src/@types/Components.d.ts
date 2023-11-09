@@ -45,6 +45,7 @@ export type AgendaEventType = {
   horaFinal: string;
   dataInicial: string;
   dataFinal: string;
+  idHorarioAlterado: number;
 };
 
 declare module "react-big-calendar/" {
