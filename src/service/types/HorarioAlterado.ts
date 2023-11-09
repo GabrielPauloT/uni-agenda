@@ -1,6 +1,6 @@
 export type HorarioAlteradoType = {
   IdHorarioAlterado: number;
-  idagendamento: number;
+  IdAgendamento: number;
   data: string;
   horainicial: string;
   horafinal: string;
