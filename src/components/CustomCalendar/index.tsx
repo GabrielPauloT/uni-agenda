@@ -60,8 +60,9 @@ export function CustomCalendar({
   const Year = new Date().getFullYear();
 
   return (
-    <div className="mt-0 w-screen rounded-lg bg-white p-4 shadow-md max-md:ml-2 max-md:mt-16">
+    <div className="mt-0 h-full max-w-full rounded-lg bg-white px-4 shadow-md max-md:ml-2 max-md:mt-5">
       <DnDCalendar
+        // className="max-w-screen-xl "
         // draggableAccessor={(event: AgendaEventType) =>
         //   event.isDraggable === true
         // }

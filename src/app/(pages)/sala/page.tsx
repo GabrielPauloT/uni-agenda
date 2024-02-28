@@ -2,11 +2,13 @@
 import { useCallback, useMemo, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
+import { ReactQueryKeysEnum } from "@/@types";
 import { Modal } from "@/components";
 import { DataTable } from "@/components/DataTable";
 import { Layout } from "@/components/Layout";
 import { Toast } from "@/components/Toast";
 import { SalaQuery } from "@/service/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { ToastStateType } from "../usuario/type";
 
@@ -14,26 +16,30 @@ import { ModalInput } from "./modalInput";
 import { ModalView } from "./modalView";
 import { DataSalaType, FormSalaType } from "./type";
 
-const PER_PAGE = 6;
+const PER_PAGE = 10;
 const DEFAULT_SALA_DATA = {
   id: 0,
   nome: "",
-  tipo: "",
+  tipo: 0,
   capacidade: 0,
   CriadoEm: new Date(),
   AtualizadoEm: new Date(),
 };
 
 export default function Sala() {
+  const queryCliente = useQueryClient();
   const [title, setTitle] = useState("");
   const [toast, setToast] = useState<ToastStateType>();
-  const [dataSala, setDataSala] = useState(DEFAULT_SALA_DATA);
+  const [dataSala, setDataSala] = useState<any>(DEFAULT_SALA_DATA);
   const [openModalView, setOpenModalView] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const formMethods = useForm<FormSalaType>();
   const [page, setPage] = useState(1);
 
   const { data: salaData } = SalaQuery.useSala(page, PER_PAGE);
+
+  const createSalaMutation = SalaQuery.useCreateSala();
+  const updateSalaMutation = SalaQuery.useUpdateSala();
 
   const resetData = () => {
     setDataSala(DEFAULT_SALA_DATA);
@@ -56,7 +62,6 @@ export default function Sala() {
 
   const onEditClick = useCallback((row: FormSalaType) => {
     setTitle("Editar Sala");
-    console.log(row);
     setDataSala({
       id: row.id,
       nome: row.NomeDaSala,
@@ -66,19 +71,22 @@ export default function Sala() {
     setOpenModal(true);
   }, []);
 
-  const onDeleteClick = useCallback((row: DataUsuarioType) => {
-    //   deleteUsuarioMutation
-    //     .mutateAsync(row.Id)
-    //     .then(() => {
-    //       showSuccessToast("Usuario deletado com sucesso");
-    //       queryCliente.invalidateQueries([ReactQueryKeysEnum.USUARIO_FINDALL]);
-    //     })
-    //     .catch(() => {
-    //       showErrorToast("Erro ao deletar usuario");
-    //     });
-    // },
-    // [deleteUsuarioMutation, queryCliente],
-  });
+  const onDeleteClick = useCallback(
+    (/* row: FormSalaType */) => {
+      //   //   deleteUsuarioMutation
+      //   //     .mutateAsync(row.Id)
+      //   //     .then(() => {
+      //   //       showSuccessToast("Usuario deletado com sucesso");
+      //   //       queryCliente.invalidateQueries([ReactQueryKeysEnum.USUARIO_FINDALL]);
+      //   //     })
+      //   //     .catch(() => {
+      //   //       showErrorToast("Erro ao deletar usuario");
+      //   //     });
+      //   // },
+      //   // [deleteUsuarioMutation, queryCliente],
+    },
+    [],
+  );
 
   const onViewClick = useCallback((row: DataSalaType) => {
     setTitle("Visualizar Sala");
@@ -115,38 +123,43 @@ export default function Sala() {
   );
 
   const onSubmit: SubmitHandler<FormSalaType> = (data) => {
-    // if (title === "Editar Usuario") {
-    //   updateUsuarioMutation
-    //     .mutateAsync({
-    //       userId: userData.Id,
-    //       usuarioData: data,
-    //     })
-    //     .then(() => {
-    //       showSuccessToast("Usuario atualizado com sucesso");
-    //       queryCliente.invalidateQueries([ReactQueryKeysEnum.USUARIO_FINDALL]);
-    //     })
-    //     .catch(() => {
-    //       showErrorToast("Erro ao atualizar usuario");
-    //     });
-    // } else if (title === "Cadastrar Usuario") {
-    //   createUsuarioMutation
-    //     .mutateAsync(data)
-    //     .then(() => {
-    //       showSuccessToast("Usuario cadastrado com sucesso");
-    //       queryCliente.invalidateQueries([ReactQueryKeysEnum.USUARIO_FINDALL]);
-    //     })
-    //     .catch(() => {
-    //       showErrorToast("Erro ao cadastrar usuario");
-    //     });
-    // }
-    showSuccessToast("Usuario cadastrado com sucesso");
-    showErrorToast("Erro ao cadastrar usuario");
+    const dataFormarted = {
+      ...data,
+      IdTipoDaSala: Number(data.IdTipoDaSala),
+      Capacidade: Number(data.Capacidade),
+    };
+    if (title === "Editar Sala") {
+      updateSalaMutation
+        .mutateAsync({
+          salaId: dataSala.id,
+          salaData: dataFormarted,
+        })
+        .then(() => {
+          showSuccessToast("Sala atualizada com sucesso");
+          queryCliente.invalidateQueries([ReactQueryKeysEnum.SALA_FINDALL]);
+        })
+        .catch(() => {
+          showErrorToast("Erro ao atualizar sala");
+        });
+    } else if (title === "Cadastrar Sala") {
+      createSalaMutation
+        .mutateAsync(dataFormarted)
+        .then(() => {
+          showSuccessToast("Sala cadastrada com sucesso");
+          queryCliente.invalidateQueries([ReactQueryKeysEnum.SALA_FINDALL]);
+        })
+        .catch(() => {
+          showErrorToast("Erro ao cadastrar sala");
+        });
+    }
+    showSuccessToast("Sala cadastrada com sucesso");
+    showErrorToast("Erro ao cadastrar sala");
     closeModal();
   };
 
   return (
     <Layout pageTitle="Sala">
-      <div className="justify-centeralign-middle flex min-h-screen flex-col">
+      <div className="justify-centeralign-middle flex min-h-screen flex-col overflow-hidden">
         <h1 className="mb-12 mt-6 text-center text-3xl font-semibold tracking-wide">
           Sala
         </h1>

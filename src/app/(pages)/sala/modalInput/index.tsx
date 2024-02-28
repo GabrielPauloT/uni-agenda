@@ -59,10 +59,10 @@ export function ModalInput({
         </label>
         <select
           title="Lista de tipo de sala"
-          id="idTipo"
+          id="IdTipoDaSala"
           placeholder="Selecione o tipo da sala"
           className="h-10 w-full rounded-md border border-gray-300 pl-2 text-sm font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
-          {...register("idTipo", {
+          {...register("IdTipoDaSala", {
             required: true,
           })}
           // value={}

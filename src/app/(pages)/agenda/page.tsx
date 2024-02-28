@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { SlotInfo } from "react-big-calendar/";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
@@ -8,7 +8,7 @@ import moment from "moment-timezone";
 
 import { ReactQueryKeysEnum } from "@/@types";
 import { AgendaEventType } from "@/@types/Components";
-import { CustomCalendar, Layout, Modal } from "@/components";
+import { CustomCalendar, Layout, Modal, Spinner } from "@/components";
 import {
   AppointmentType,
   CreateAgendamentoType,
@@ -18,6 +18,7 @@ import {
   useCreateAgendamento,
 } from "@/service";
 import { useSala } from "@/service/hooks/SalaQuery";
+import { useTipoSala } from "@/service/hooks/TipoSalaQuery";
 import { HorarioAlteradoRequest } from "@/service/requests";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -31,6 +32,7 @@ export default function Agenda() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [toast, setToast] = useState<ToastStateType>();
   const [agendamento, setAgendamento] = useState<AgendaEventType>();
+  const [tipoSala, setTipoSala] = useState<number | undefined>();
   const [criacaoAgendamentoAtual, setCriacaoAgendamentoAtual] =
     useState<CriacaoAgendamentoType>();
   const [title, setTitle] = useState("");
@@ -44,9 +46,22 @@ export default function Agenda() {
     setIsModalOpen(false);
   };
 
-  const { data: dataSalas } = useSala(1, 100);
+  const { data: dataSalas } = useSala(
+    1,
+    100,
+    tipoSala === 0 ? undefined : tipoSala,
+  );
 
   const { data: dataAgenda, refetch: refetchDataAgenda } = useAgendamento();
+
+  const { data: tipoSalas } = useTipoSala(1, 100);
+
+  const tipoSalaConcatPlaceholder = useMemo(() => {
+    return [
+      { id: 0, nomedotipo: "Selecione a sala" },
+      ...(tipoSalas?.Result || []),
+    ];
+  }, [tipoSalas]);
 
   const createAgendamentoMutation = useCreateAgendamento();
 
@@ -70,8 +85,13 @@ export default function Agenda() {
     agendamento: ListarAgendamentoType,
     appoiment: AppointmentType,
   ) => {
+    if (horariosAlterados === undefined)
+      return {
+        horarioInicial: agendamento.HoraInicial,
+        horarioFinal: agendamento.HoraFinal,
+        idHorarioAlterado: undefined,
+      };
     const horarioAlterado = horariosAlterados.find(
-      // Verificar se vai dar problema de timezone
       (item) =>
         moment(item.data).tz("America/Sao_Paulo").utc().format("YYYY-MM-DD") ===
         appoiment.data,
@@ -196,17 +216,52 @@ export default function Agenda() {
     [isModalOpen],
   );
   return (
-    <div>
+    <>
       <Layout pageTitle="Agenda">
-        <CustomCalendar
-          defaultView="day"
-          views={["day"]}
-          resourceMap={OmmitDataSala}
-          resizable
-          event={OmmitDataAgenda}
-          onSelectEvent={handleSelectEvent}
-          onSelectSlot={handleSelectSlot}
-        />
+        <div className="mr-10 mt-2 flex justify-end max-md:mt-16 max-md:justify-center">
+          <div>
+            <label className=" mb-2 block text-sm font-bold text-gray-700">
+              Tipo de Salsa:
+            </label>
+            <select
+              title="Lista de salas"
+              id="idTipoSala"
+              value={tipoSala ? tipoSala : "Selecione a sala"}
+              placeholder="Selecione a sala"
+              onChange={(tipo) => {
+                console.log(tipo.target.value);
+                setTipoSala(Number(tipo.target.value));
+              }}
+              className="h-10 w-full rounded-md border border-gray-300 pl-2 text-sm font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
+            >
+              {tipoSalaConcatPlaceholder?.map((item) => {
+                return (
+                  <option key={item.id} value={item.id}>
+                    {item.nomedotipo}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        </div>
+        {tipoSala && tipoSala !== 0 ? (
+          <CustomCalendar
+            defaultView="day"
+            views={["day"]}
+            resourceMap={OmmitDataSala}
+            resizable
+            event={OmmitDataAgenda as any}
+            onSelectEvent={handleSelectEvent}
+            onSelectSlot={handleSelectSlot}
+          />
+        ) : (
+          // <div className="flex h-full items-center justify-center">
+          <div className="m-auto flex h-96 w-auto flex-col items-center justify-center gap-4">
+            <h1>Selecione um Tipo de sala</h1>
+            <Spinner />
+          </div>
+          // </div>
+        )}
         <FormProvider {...formMethods}>
           <Modal isOpen={isModalOpen} title={title}>
             <ModalInputAgenda
@@ -240,7 +295,6 @@ export default function Agenda() {
                 } as AgendaEventType)
               }
               onChageFalta={(e) => {
-                console.log(e.target.checked, e);
                 setAgendamento({
                   ...agendamento,
                   falta: e.target.checked,
@@ -256,6 +310,6 @@ export default function Agenda() {
           </Modal>
         </FormProvider>
       </Layout>
-    </div>
+    </>
   );
 }

@@ -7,12 +7,11 @@ import { CreateSalaType } from "..";
 
 import { createSala, deleteSala, updateSala } from "../requests/SalaRequest";
 
-export function useSala(page: number, perPage: number) {
+export function useSala(page: number, perPage: number, tipoSala?: number) {
   return useQuery({
-    queryKey: [ReactQueryKeysEnum.SALA_FINDALL, page, perPage],
+    queryKey: [ReactQueryKeysEnum.SALA_FINDALL, page, perPage, tipoSala],
     queryFn: async () => {
-      const { data } = await SalaRequest.findAllSala(page, perPage);
-      console.log({ data });
+      const { data } = await SalaRequest.findAllSala(page, perPage, tipoSala);
       return data;
     },
   });
@@ -25,14 +24,14 @@ export function useCreateSala() {
   return mutation;
 }
 
-export function useDeleteUsuario() {
+export function useDeleteSala() {
   const mutation = useMutation({
     mutationFn: (salaId: number) => deleteSala(salaId),
   });
   return mutation;
 }
 
-export function useUpdateUsuario() {
+export function useUpdateSala() {
   const mutation = useMutation({
     mutationFn: ({
       salaId,

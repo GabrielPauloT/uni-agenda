@@ -2,6 +2,8 @@
 import { useMemo, useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
+import moment from "moment-timezone";
+
 import { DataTable, Modal } from "@/components";
 import { Layout } from "@/components/Layout";
 import { relatorioFalta } from "@/service/requests/RelatorioRequest";
@@ -33,15 +35,15 @@ export default function Relatorio() {
 
   function convertData(inputData: string) {
     const date = new Date(inputData);
+    const dateFormatedLocale = moment(date).tz("America/Sao_Paulo").utc();
     date.setDate(date.getDate() + 2);
-    const dataFormatada = date.toISOString();
+    const dataFormatada = dateFormatedLocale.toISOString();
 
     return dataFormatada;
   }
 
   const onSubmit: SubmitHandler<RelatorioModalType> = (data) => {
     setData(data);
-    console.log();
     const dataInicio = convertData(data.dataInicio);
     const dataFim = convertData(data.dataFim);
     relatorioFalta(dataInicio, dataFim);
@@ -53,7 +55,7 @@ export default function Relatorio() {
     <Layout pageTitle="Relatório">
       <div className="justify-centeralign-middle flex min-h-screen flex-col">
         <h1 className="mb-12 mt-6 text-center text-3xl font-semibold tracking-wide">
-          Solicitante
+          Relatório
         </h1>
         <Modal isOpen={openModal} title={"Gerador de Relatorio"}>
           <FormProvider {...formMethods}>

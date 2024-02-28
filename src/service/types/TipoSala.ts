@@ -1,4 +1,4 @@
-export type TipoSalaType = {
+export type TipoSalaT = {
   id: number;
   nomedotipo: string;
   createdAt: Date;

@@ -1,7 +1,7 @@
 import { Event, SlotInfo, View } from "react-big-calendar";
 import { withDragAndDropProps } from "react-big-calendar/lib/addons/dragAndDrop";
 
-import { AgendaEventType } from "@/@types";
+import { AgendaEventType } from "@/@types/Components";
 
 export type SalaMapType = {
   id: number;

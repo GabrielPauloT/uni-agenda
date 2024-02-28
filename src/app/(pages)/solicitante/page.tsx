@@ -47,11 +47,10 @@ export default function Solicitantes() {
   const [openModal, setOpenModal] = useState(false);
   const formMethods = useForm<FormSolicitanteType>();
   const [page, setPage] = useState(1);
-  const perPage = 6;
 
   const { data: solicitanteData } = SolicitanteQuery.useSolicitante(
     page,
-    perPage,
+    PER_PAGE,
   );
 
   const resetData = () => {
@@ -189,7 +188,8 @@ export default function Solicitantes() {
                     data={dataSolicitante}
                     onClick={closeModal}
                     onSubmit={formMethods.handleSubmit(onSubmit)}
-                    // onChageCapacidade={(e) =>
+                    onChageNome={undefined}
+                    onChageCapacidade={undefined} // onChageCapacidade={(e) =>
                     //   setDataSala({
                     //     ...dataSala,
                     //     capacidade: Number(e.target.value),
@@ -219,7 +219,7 @@ export default function Solicitantes() {
             data={formattedData}
             page={page}
             total={solicitanteData?.TotalRecords}
-            perPage={perPage}
+            perPage={PER_PAGE}
             onNextPageClick={() => setPage((page) => page + 1)}
             onBackPageClick={() => setPage((page) => page - 1)}
             onEditClick={onEditClick}

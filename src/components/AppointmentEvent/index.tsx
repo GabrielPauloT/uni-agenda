@@ -1,10 +1,12 @@
 import React from "react";
-import { EventProps } from "react-big-calendar";
+// import { EventProps } from "react-big-calendar";
 
-import { AgendaEventType } from "@/@types";
+// import { AgendaEventType } from "@/@types/Components";
+
+// import { AgendaEventType } from "@/@types";
 
 type EventType = {
-  data: EventProps<AgendaEventType>;
+  data: any /* EventProps<AgendaEventType> */;
 };
 
 // import { AppointmentStatusCode, EVENT_STATUS_COLORS } from "./const";

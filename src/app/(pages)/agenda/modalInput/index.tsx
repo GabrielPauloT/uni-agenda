@@ -1,17 +1,20 @@
-import { useEffect, useState } from "react";
+/* eslint-disable import-helpers/order-imports */
+import { useEffect, useMemo, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
 import moment from "moment";
 
-import { DiaSemanaEnum } from "@/@types";
+import { DiaSemanaEnum, ReactQueryKeysEnum } from "@/@types";
 import { Input } from "@/components";
 import { useCreateFalta } from "@/service/hooks/FaltaQuery";
 import { useSala } from "@/service/hooks/SalaQuery";
 import { useSolicitante } from "@/service/hooks/SolicitanteQuery";
 
 const animatedComponents = makeAnimated();
+
+import { useQueryClient } from "@tanstack/react-query";
 
 import { ModalAgendaInputType } from "./type";
 
@@ -29,6 +32,7 @@ export function ModalInputAgenda({
   onSubmit,
 }: ModalAgendaInputType) {
   const [totalRecordsSolicitante, setTotalRecordSolicitante] = useState(0);
+  const queryCliente = useQueryClient();
   const [totalRecordsSala, setTotalRecordSala] = useState(0);
   const { data: solicitanteData } = useSolicitante(
     1,
@@ -43,6 +47,13 @@ export function ModalInputAgenda({
     setTotalRecordSolicitante(solicitanteData?.TotalRecords || 0);
     setTotalRecordSala(salaData?.TotalRecords || 0);
   }, [solicitanteData, salaData]);
+
+  const solicitanteConcatPlaceholder = useMemo(() => {
+    return [
+      { Id: 0, NomeSolicitante: "Selecione o solicitante" },
+      ...(solicitanteData?.Result || []),
+    ];
+  }, [solicitanteData]);
 
   const {
     register,
@@ -80,11 +91,12 @@ export function ModalInputAgenda({
           placeholder="Selecione o solicitante"
           className="h-10 w-full rounded-md border border-gray-300 pl-2 text-sm font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
           {...register("IdSoliciante", {
-            required: true,
+            // required: true,
+            value: 0,
             disabled: isEdit,
           })}
         >
-          {solicitanteData?.Result.map((item) => {
+          {solicitanteConcatPlaceholder?.map((item) => {
             return (
               <option key={item.Id} value={item.Id}>
                 {item.NomeSolicitante}
@@ -143,7 +155,7 @@ export function ModalInputAgenda({
         placeholder="Tema"
         id="Tema"
         name="tema"
-        value={data?.tema || ""}
+        value={""}
         onChange={onChageTema}
         required={isEdit}
         disable={isEdit}
@@ -158,7 +170,8 @@ export function ModalInputAgenda({
           placeholder="Selecione a sala"
           className="h-10 w-full rounded-md border border-gray-300 pl-2 text-sm font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
           {...register("resourceId", {
-            required: true,
+            // required: true,
+            value: dataTableCreated?.resourceId ?? "",
             disabled: isEdit,
           })}
           value={dataTableCreated?.resourceId ?? ""}
@@ -276,6 +289,9 @@ export function ModalInputAgenda({
                 };
 
                 createFaltaMutation.mutate(faltaData);
+                queryCliente.invalidateQueries([
+                  ReactQueryKeysEnum.AGENDAMENTO_FINDALL,
+                ]);
               }
               // @ts-expect-error
               onChageFalta(e);

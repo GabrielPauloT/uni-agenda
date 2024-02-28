@@ -1,10 +1,10 @@
 import { ApiResult } from "@/@types/API/ApiResult";
 
 import { api } from "../api";
-import { CreateTipoSalaType, TipoSalaType } from "../types/TipoSala";
+import { CreateTipoSalaType, TipoSalaT } from "../types/TipoSala";
 
 export function findAllTipoSala(page: number, perPage: number) {
-  return api.get<ApiResult<TipoSalaType[]>>(
+  return api.get<ApiResult<TipoSalaT[]>>(
     `/tipossalas/${page}/page/${perPage}/per-page`,
   );
 }

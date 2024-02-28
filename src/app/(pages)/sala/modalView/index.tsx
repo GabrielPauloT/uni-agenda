@@ -1,7 +1,6 @@
 import { ModalViewType } from "./type";
 
 export function ModalView({ data, onClick }: ModalViewType) {
-  console.log({ data }, "modalView");
   return (
     <div className="mx-auto my-8 flex max-w-md flex-col items-center space-y-4 rounded-lg bg-white p-8 shadow-xl">
       <div className="flex w-full flex-col space-y-2">

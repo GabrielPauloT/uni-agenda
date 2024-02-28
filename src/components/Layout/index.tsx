@@ -16,7 +16,7 @@ export function Layout({ pageTitle, children }: LayoutProps) {
   const [showSidebar, setShowSidebar] = useState(false);
 
   return (
-    <>
+    <div>
       <Head>
         <title>{titleConcat}</title>
       </Head>
@@ -24,11 +24,9 @@ export function Layout({ pageTitle, children }: LayoutProps) {
         <div className="flex">
           <MenuBarMobile setter={setShowSidebar} />
           <Sidebar show={showSidebar} setter={setShowSidebar} />
-          <div className="flex min-h-screen w-screen flex-grow flex-col md:w-full">
-            {children}
-          </div>
+          <div className="flex h-1/2 w-1/2 flex-grow flex-col ">{children}</div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
