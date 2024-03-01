@@ -13,3 +13,19 @@ export type SolicitanteForm = {
   NomeSolicitante: string;
   EmailSolicitante: string;
 };
+
+export type EditarSolicitanteFormType = {
+  Id: number;
+  Nome?: string;
+  Email?: string;
+  tipo?: string;
+  CriadoEm?: string;
+  AtualizadoEm?: string;
+};
+
+export type EditarSolicitanteQuery = {
+  id: number;
+  NomeSolicitante: string;
+  EmailSolicitante: string;
+  IdTipoSolicitante: number;
+};

@@ -92,7 +92,7 @@ export function ModalInputAgenda({
           className="h-10 w-full rounded-md border border-gray-300 pl-2 text-sm font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
           {...register("IdSoliciante", {
             // required: true,
-            value: 0,
+            // value: 0,
             disabled: isEdit,
           })}
         >

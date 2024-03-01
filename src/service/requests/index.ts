@@ -6,3 +6,4 @@ export * as FaltaRequest from "./FaltaRequest";
 export * as TipoSalaRequest from "./TipoSalaRequest";
 export * as TipoSolicitanteRequest from "./TipoSolicitanteRequest";
 export * as HorarioAlteradoRequest from "./HorarioAlteradoRequest";
+export * as AuthRequest from "./AuthRequest";

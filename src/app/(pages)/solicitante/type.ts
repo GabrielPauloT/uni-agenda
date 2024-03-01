@@ -13,3 +13,12 @@ export type ModalDataViewType = {
   Nome: string;
   tipo: string;
 };
+
+export type DeleteSolicitanteType = {
+  Id: number;
+  Nome: string;
+  Email: string;
+  tipo: string;
+  CriadoEm: string;
+  AtualizadoEm: string;
+};

@@ -221,7 +221,7 @@ export default function Agenda() {
         <div className="mr-10 mt-2 flex justify-end max-md:mt-16 max-md:justify-center">
           <div>
             <label className=" mb-2 block text-sm font-bold text-gray-700">
-              Tipo de Salsa:
+              Tipo de Sala:
             </label>
             <select
               title="Lista de salas"
@@ -229,7 +229,6 @@ export default function Agenda() {
               value={tipoSala ? tipoSala : "Selecione a sala"}
               placeholder="Selecione a sala"
               onChange={(tipo) => {
-                console.log(tipo.target.value);
                 setTipoSala(Number(tipo.target.value));
               }}
               className="h-10 w-full rounded-md border border-gray-300 pl-2 text-sm font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"

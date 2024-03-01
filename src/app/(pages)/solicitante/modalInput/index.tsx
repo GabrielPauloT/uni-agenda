@@ -11,11 +11,13 @@ export function ModalInput({
   onClick,
   onSubmit,
   onChageNome,
-  onChageCapacidade,
+  onChageEmail,
+  onChageTipo,
   isEdit,
 }: ModalInputProps) {
   const {
     register,
+    setValue,
     formState: { errors },
   } = useFormContext();
   const [totalRecords, setTotalRecords] = useState(0);
@@ -24,6 +26,21 @@ export function ModalInput({
   useEffect(() => {
     setTotalRecords(tipoSolicitanteData?.TotalRecords || 0);
   }, [tipoSolicitanteData]);
+
+  useEffect(() => {
+    setValue(
+      "IdTipoSolicitante",
+      tipoSolicitanteData?.Result.find(
+        (x) => x.nomedotipo === data.NomeTipoSolicitante,
+      )?.id,
+    );
+  }, [data.NomeTipoSolicitante, setValue, tipoSolicitanteData?.Result]);
+
+  function onChageTipoSolicitante(event: React.ChangeEvent<HTMLSelectElement>) {
+    const selectedValue = event.target.value;
+    setValue("IdTipoSolicitante", selectedValue);
+    onChageTipo && onChageTipo(event);
+  }
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-6">
@@ -48,7 +65,7 @@ export function ModalInput({
         id="EmailSolicitante"
         name="EmailSolicitante"
         value={data.EmailSolicitante || ""}
-        onChange={onChageCapacidade}
+        onChange={onChageEmail}
         required={isEdit}
       />
       <div>
@@ -62,8 +79,8 @@ export function ModalInput({
           className="h-10 w-full rounded-md border border-gray-300 pl-2 text-sm font-medium text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500"
           {...register("IdTipoSolicitante", {
             required: true,
+            onChange: onChageTipoSolicitante,
           })}
-          value={data.IdTipoSolicitante || ""}
         >
           {tipoSolicitanteData?.Result.map((tipo) => (
             <option key={tipo.id} value={tipo.id}>

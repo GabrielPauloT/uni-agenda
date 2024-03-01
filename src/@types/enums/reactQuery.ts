@@ -27,4 +27,5 @@ export enum ReactQueryKeysEnum {
   TIPO_SOLICITANTE_CREATE = "useCreateTipoSolicitante",
   TIPO_SOLICITANTE_UPDATE = "useUpdateTipoSolicitante",
   TIPO_SOLICITANTE_DELETE = "useDeleteTipoSolicitante",
+  AUTH_LOGIN = "useAuth",
 }

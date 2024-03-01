@@ -45,12 +45,8 @@ export default function Sala() {
     setDataSala(DEFAULT_SALA_DATA);
   };
 
-  const showSuccessToast = (message: string) => {
-    setToast({ type: "success", message });
-  };
-
-  const showErrorToast = (message: string) => {
-    setToast({ type: "error", message });
+  const showToast = (message: string, type: "success" | "error") => {
+    setToast({ type, message });
   };
 
   const closeModal = () => {
@@ -135,25 +131,25 @@ export default function Sala() {
           salaData: dataFormarted,
         })
         .then(() => {
-          showSuccessToast("Sala atualizada com sucesso");
+          showToast("Sala atualizada com sucesso", "success");
           queryCliente.invalidateQueries([ReactQueryKeysEnum.SALA_FINDALL]);
         })
         .catch(() => {
-          showErrorToast("Erro ao atualizar sala");
+          showToast("Erro ao atualizar sala", "error");
         });
     } else if (title === "Cadastrar Sala") {
       createSalaMutation
         .mutateAsync(dataFormarted)
         .then(() => {
-          showSuccessToast("Sala cadastrada com sucesso");
+          showToast("Sala cadastrada com sucesso", "success");
           queryCliente.invalidateQueries([ReactQueryKeysEnum.SALA_FINDALL]);
         })
         .catch(() => {
-          showErrorToast("Erro ao cadastrar sala");
+          showToast("Erro ao cadastrar sala", "error");
         });
     }
-    showSuccessToast("Sala cadastrada com sucesso");
-    showErrorToast("Erro ao cadastrar sala");
+    showToast("Sala cadastrada com sucesso", "success");
+    showToast("Erro ao cadastrar sala", "error");
     closeModal();
   };
 

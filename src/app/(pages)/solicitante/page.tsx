@@ -8,17 +8,25 @@ import { Modal } from "@/components";
 import { DataTable } from "@/components/DataTable";
 import { Layout } from "@/components/Layout";
 import { SolicitanteQuery } from "@/service/hooks";
-import { useCreateSolicitante } from "@/service/hooks/SolicitanteQuery";
-import { Solicitante } from "@/service/types";
+import {
+  useCreateSolicitante,
+  useDeleteSolicitante,
+  useUpdateSolicitante,
+} from "@/service/hooks/SolicitanteQuery";
+import { EditarSolicitanteFormType } from "@/service/types";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { ToastStateType } from "../usuario/type";
 
 import { ModalInput } from "./modalInput";
 import { ModalView } from "./modalView";
-import { FormSolicitanteType, ModalDataViewType } from "./type";
+import {
+  DeleteSolicitanteType,
+  FormSolicitanteType,
+  ModalDataViewType,
+} from "./type";
 
-const PER_PAGE = 6;
+const PER_PAGE = 10;
 const DEFAULT_SALA_DATA: FormSolicitanteType = {
   Id: 0,
   IdTipoSolicitante: 0,
@@ -67,6 +75,8 @@ export default function Solicitantes() {
   };
 
   const createSolicitanteMutation = useCreateSolicitante();
+  const deleteSolicitanteMutation = useDeleteSolicitante();
+  const updateSolicitanteMutation = useUpdateSolicitante();
 
   const closeModal = () => {
     formMethods.reset();
@@ -75,13 +85,36 @@ export default function Solicitantes() {
     setOpenModal(false);
   };
 
-  const onEditClick = (row: Solicitante) => {
-    console.log(row);
-  };
+  const onEditClick = useCallback((row: EditarSolicitanteFormType) => {
+    setTitle("Editar Solicitante");
+    setDataSolicitante({
+      Id: row.Id,
+      IdTipoSolicitante: 0,
+      CriadoEm: new Date(),
+      AtualizadoEm: new Date(),
+      NomeSolicitante: row.Nome ?? "",
+      EmailSolicitante: row.Email ?? "",
+      NomeTipoSolicitante: row.tipo ?? "",
+    });
+    setOpenModal(true);
+  }, []);
 
-  const onDeleteClick = (row: Solicitante) => {
-    console.log(row);
-  };
+  const onDeleteClick = useCallback(
+    (row: DeleteSolicitanteType) => {
+      deleteSolicitanteMutation
+        .mutateAsync(row.Id)
+        .then(() => {
+          showSuccessToast("Usuario deletado com sucesso");
+          queryCliente.invalidateQueries([
+            ReactQueryKeysEnum.SOLICITANTE_FINDALL,
+          ]);
+        })
+        .catch(() => {
+          showErrorToast("Erro ao deletar usuario");
+        });
+    },
+    [deleteSolicitanteMutation, queryCliente],
+  );
 
   const onViewClick = useCallback((row: ModalDataViewType) => {
     setTitle("Visualizar Sala");
@@ -133,32 +166,36 @@ export default function Solicitantes() {
       ...data,
       IdTipoSolicitante: idTipo,
     };
-    // if (title === "Editar Usuario") {
-    //   updateSolicitanteMutation
-    //     .mutateAsync({
-    //       userId: userData.Id,
-    //       usuarioData: data,
-    //     })
-    //     .then(() => {
-    //       showSuccessToast("Usuario atualizado com sucesso");
-    //       queryCliente.invalidateQueries([ReactQueryKeysEnum.USUARIO_FINDALL]);
-    //     })
-    //     .catch(() => {
-    //       showErrorToast("Erro ao atualizar usuario");
-    //     });
-    // } else if (title === "Cadastrar Usuario") {
-    createSolicitanteMutation
-      .mutateAsync(dataFormatada)
-      .then(() => {
-        showSuccessToast("Solicitante cadastrado com sucesso");
-        queryCliente.invalidateQueries([
-          ReactQueryKeysEnum.SOLICITANTE_FINDALL,
-        ]);
-      })
-      .catch(() => {
-        showErrorToast("Erro ao cadastrar solicitante");
-      });
-    // }
+    if (title === "Editar Solicitante") {
+      updateSolicitanteMutation
+        .mutateAsync({
+          id: dataSolicitante.Id,
+          EmailSolicitante: dataSolicitante.EmailSolicitante,
+          NomeSolicitante: dataSolicitante.NomeSolicitante,
+          IdTipoSolicitante: dataSolicitante.IdTipoSolicitante,
+        })
+        .then(() => {
+          showSuccessToast("Usuario atualizado com sucesso");
+          queryCliente.invalidateQueries([
+            ReactQueryKeysEnum.SOLICITANTE_FINDALL,
+          ]);
+        })
+        .catch(() => {
+          showErrorToast("Erro ao atualizar usuario");
+        });
+    } else if (title === "Adicionar Novo Solicitante") {
+      createSolicitanteMutation
+        .mutateAsync(dataFormatada)
+        .then(() => {
+          showSuccessToast("Solicitante cadastrado com sucesso");
+          queryCliente.invalidateQueries([
+            ReactQueryKeysEnum.SOLICITANTE_FINDALL,
+          ]);
+        })
+        .catch(() => {
+          showErrorToast("Erro ao cadastrar solicitante");
+        });
+    }
     showSuccessToast("Usuario cadastrado com sucesso");
     showErrorToast("Erro ao cadastrar usuario");
     closeModal();
@@ -184,32 +221,29 @@ export default function Solicitantes() {
               ) : (
                 <FormProvider {...formMethods}>
                   <ModalInput
+                    setDataSolicitante={setDataSolicitante}
                     isEdit={!(title === "Editar Solicitante")}
                     data={dataSolicitante}
                     onClick={closeModal}
                     onSubmit={formMethods.handleSubmit(onSubmit)}
-                    onChageNome={undefined}
-                    onChageCapacidade={undefined} // onChageCapacidade={(e) =>
-                    //   setDataSala({
-                    //     ...dataSala,
-                    //     capacidade: Number(e.target.value),
-                    //   })
-                    // }
-                    // onChageNome={(e) =>
-                    //   setDataSala({
-                    //     ...dataSala,
-                    //     nome: e.target.value,
-                    //   })
-                    // }
-                    // onChageTipo={(e) =>
-                    //   setDataSala({
-                    //     ...dataSala,
-                    //     tipo: {
-                    //       id: Number(e.target.value),
-                    //       NomeDoTipo: "",
-                    //     },
-                    //   })
-                    // }
+                    onChageNome={(e) =>
+                      setDataSolicitante({
+                        ...dataSolicitante,
+                        NomeSolicitante: e.target.value,
+                      })
+                    }
+                    onChageEmail={(e) =>
+                      setDataSolicitante({
+                        ...dataSolicitante,
+                        EmailSolicitante: e.target.value,
+                      })
+                    }
+                    onChageTipo={(e) =>
+                      setDataSolicitante({
+                        ...dataSolicitante,
+                        IdTipoSolicitante: Number(e.target.value),
+                      })
+                    }
                   />
                 </FormProvider>
               )}

@@ -25,8 +25,6 @@ export function ModalInput({
     setTotalRecords(tipoSalaData?.TotalRecords || 0);
   }, [tipoSalaData]);
 
-  console.log({ data }, "modalInput");
-
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-6">
       <Input
@@ -65,7 +63,6 @@ export function ModalInput({
           {...register("IdTipoDaSala", {
             required: true,
           })}
-          // value={}
         >
           {tipoSalaData?.Result.map((tipo) => (
             <option key={tipo.id} value={tipo.id}>
