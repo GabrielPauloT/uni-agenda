@@ -8,14 +8,13 @@ import { Icons } from "..";
 export const Toast = ({ message, type, isClose }: ToastProps) => {
   const [isVisible, setIsVisible] = useState(true);
 
-  // Desaparecer depois de 5 segundos
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
       isClose(undefined);
     }, 5000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [isClose]);
 
   if (!isVisible) {
     return null;
