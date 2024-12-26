@@ -1,5 +1,5 @@
 # uni-agenda
-TCC para agendamento de salas de informática na UNIPAM
+Projeto de conclusão de curso universitário para agendamento de todas as salas da UNIPAM.
 
 Usando:
 Next.js + React com typeScript
